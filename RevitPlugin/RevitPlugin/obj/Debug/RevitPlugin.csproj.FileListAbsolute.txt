@@ -9,3 +9,14 @@ C:\Users\anton\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin.g.re
 C:\Users\anton\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin.csproj.CoreCompileInputs.cache
 C:\Users\anton\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin.dll
 C:\Users\anton\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin.pdb
+D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin.csproj.AssemblyReference.cache
+D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\Rooms.g.cs
+D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin_MarkupCompile.cache
+D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin_MarkupCompile.lref
+D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin.dll
+D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin.pdb
+D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\bin\Debug\RevitPlugin.dll
+D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\bin\Debug\RevitPlugin.pdb
+D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\Rooms.baml
+D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin.g.resources
+D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin.csproj.CoreCompileInputs.cache
