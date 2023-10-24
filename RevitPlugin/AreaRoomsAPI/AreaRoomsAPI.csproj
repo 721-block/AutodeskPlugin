@@ -48,8 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AreaInfo.cs" />
+    <Compile Include="AreaType.cs" />
+    <Compile Include="AreaRoomsFormatsInfo.cs" />
+    <Compile Include="PointD.cs" />
+    <Compile Include="RoomFormat.cs" />
     <Compile Include="RoomsGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoomType.cs" />
     <Compile Include="Wall.cs" />
     <Compile Include="WallType.cs" />
   </ItemGroup>
