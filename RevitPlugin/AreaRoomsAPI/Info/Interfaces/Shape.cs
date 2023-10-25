@@ -72,7 +72,7 @@ namespace AreaRoomsAPI.Info
 
         public IList<Shape> SplitInHalf(bool isSplitByY)
         {
-            var shapes = new int[2];
+            var shapes = new Shape[2];
 
             if (isSplitByY)
             {
@@ -80,12 +80,14 @@ namespace AreaRoomsAPI.Info
                 var bottomSide = Points.OrderBy(point => point.Y).ThenByDescending(points => points.X).Take(2).ToArray();
                 var center = Height / 2;
 
-                shapes[0] = new Shape(new[4] { topSide[0], topSide[1], new PointD(topSide[1].X, topSide[1].Y - center), new PointD(topSide[0].X, center + topSide[0].Y) });
+                shapes[0] = new Shape(new PointD[4]{ topSide[0], topSide[1], new PointD(topSide[1].X, topSide[1].Y - center), new PointD(topSide[0].X, center + topSide[0].Y) });
             }
             else
             {
 
             }
+
+            return shapes;
         }
     }
 }
