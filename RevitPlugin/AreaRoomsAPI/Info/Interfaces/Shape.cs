@@ -17,7 +17,7 @@ namespace AreaRoomsAPI.Info
             var sum = 0d;
 
             sum += Math.Abs(Points[0].X - Points[Points.Count - 1].X);
-            for ( var i = 1; i < Points.Count; i++)
+            for (var i = 1; i < Points.Count; i++)
             {
                 sum += Math.Abs(Points[i].X - Points[i - 1].X);
             }
@@ -68,6 +68,24 @@ namespace AreaRoomsAPI.Info
             area += Points[Points.Count - 1].X * Points[0].Y - Points[Points.Count - 1].Y * Points[0].X;
 
             return Math.Abs(area) / 2;
+        }
+
+        public IList<Shape> SplitInHalf(bool isSplitByY)
+        {
+            var shapes = new int[2];
+
+            if (isSplitByY)
+            {
+                var topSide = Points.OrderByDescending(x => x.Y).ThenBy(point => point.X).Take(2).ToArray();
+                var bottomSide = Points.OrderBy(point => point.Y).ThenByDescending(points => points.X).Take(2).ToArray();
+                var center = Height / 2;
+
+                shapes[0] = new Shape(new[4] { topSide[0], topSide[1], new PointD(topSide[1].X, topSide[1].Y - center), new PointD(topSide[0].X, center + topSide[0].Y) });
+            }
+            else
+            {
+
+            }
         }
     }
 }

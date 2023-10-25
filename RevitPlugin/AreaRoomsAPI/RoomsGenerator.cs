@@ -12,11 +12,27 @@ namespace AreaRoomsAPI
 {
     public class RoomsGenerator
     {
+        //private readonly Dictionary<RoomType, int> roomsPriority = new Dictionary<RoomType, int>() 
+        //{
+        //    {RoomType.Kitchen, 3 },
+        //    {RoomType.Default, 3 },
+        //    {RoomType.Wardrobe, 1 },
+        //    {RoomType.Toilet, 1 },
+        //    {RoomType.Bathroom, 2 },
+        //    {RoomType.Loggia, 2 }
+        //};
+
         private readonly IList<PointD> areaPoints;
 
         private readonly double areaSquare;
 
+        private readonly int priorityRoomsCount;
+
+        private readonly HashSet<RoomType> priorityRoomsType = new HashSet<RoomType>() { RoomType.Default, RoomType.Kitchen, RoomType.Loggia };
+
         private readonly IList<RoomType> rooms;
+
+        private IList<RoomType> roomsRemaining;
 
         private readonly AreaRoomsFormatsInfo formats;
 
@@ -25,16 +41,58 @@ namespace AreaRoomsAPI
             areaPoints = areaInfo.Points;
             areaSquare = areaInfo.GetSquare();
             rooms = roomTypes;
+            roomsRemaining = rooms;
             this.formats = formats;
+
+            foreach (RoomType roomType in roomTypes)
+            {
+                if (priorityRoomsType.Contains(roomType))
+                {
+                    priorityRoomsCount++;
+                }
+            }
         }
 
         public GeneratedArea GenerateArea()
         {
-            var dictionary = new Dictionary<RoomType, IList<PointD>>();
+            var list = new List<(RoomType, IList<PointD>)>();
+
+            var tree = CreateTree();
+
             
 
 
-            return new GeneratedArea(dictionary);
+
+            return new GeneratedArea(list);
+        }
+
+        private RoomsTreeNode CreateTree()
+        {
+            var tree = new RoomsTreeNode(new Shape(areaPoints), 0);
+            var isDivisionByY = tree.shape.Height > tree.shape.Width;
+
+            var leftShape = 
+
+            if (CanInsertRoom(tree.shape, 1))
+            {
+
+            }
+            else
+            {
+                
+            }
+
+            return tree;
+        }
+
+        private bool CanInsertRoom(Shape shape, int depth)
+        {
+            if (depth ==)
+        }
+
+        private RoomsTreeNode CreateTree(RoomsTreeNode tree)
+        {
+
         }
 
         private class RoomsTreeNode
