@@ -1,4 +1,6 @@
-﻿using Autodesk.Revit.DB;
+﻿using AreaRoomsAPI;
+using AreaRoomsAPI.Info;
+using Autodesk.Revit.DB;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -6,15 +8,13 @@ using System.Windows.Media;
 
 namespace RevitPlugin
 {
-    /// <summary>
-    /// Логика взаимодействия для Rooms.xaml
-    /// </summary>
     public partial class Rooms : Window
     {
         private Curve balconyWall;
         private Curve entranceWall;
         private CurveLoopIterator walls;
         private XYZ leftTopPoint;
+        private GeneratedArea rooms;
 
         public Rooms(GeometryObject balconyWall, GeometryObject entranceWall, CurveLoop walls)
         {
@@ -23,31 +23,43 @@ namespace RevitPlugin
             this.entranceWall = entranceWall as Curve;
             this.walls = walls.GetCurveLoopIterator();
             leftTopPoint = this.walls.Current.GetEndPoint(0);
+            rooms = GenerateRooms();
 
             DrawLines();
         }
 
+        public GeneratedArea GenerateRooms()
+        {
+
+            var areaInfo = new AreaInfo(TransformData.TransformAutodeskWallsToApi(balconyWall, entranceWall, walls));
+
+            var roomsGenerator = new RoomsGenerator(areaInfo,
+                new List<RoomType> { RoomType.Corridor, RoomType.Kitchen, RoomType.Bathroom, RoomType.Default },
+                AreaRoomsFormatsInfo.GetAreaFormatsInfo(AreaType.Economy));
+
+            return roomsGenerator.GenerateArea();
+        }
+
         public void DrawLines()
         {
-            var isHaveNextElement = true;
-            while (isHaveNextElement)
+            foreach (var pair in rooms.Rooms)
             {
-                var wall = walls.Current;
-                var startPoint = wall.GetEndPoint(0);
-                var endPoint = wall.GetEndPoint(1);
-
-                var line = new System.Windows.Shapes.Line
+                for (var i = 0; i < pair.Item2.Count - 1; i++)
                 {
-                    X1 = (leftTopPoint.X - startPoint.X) * 10,
-                    Y1 = (leftTopPoint.Y - startPoint.Y) * 10,
-                    X2 = (leftTopPoint.X - endPoint.X) * 10,
-                    Y2 = (leftTopPoint.Y - endPoint.Y) * 10,
-                    Stroke = Brushes.Black
-                };
+                    var startPoint = pair.Item2[i];
+                    var endPoint = pair.Item2[i + 1];
 
-                RoomCanvas.Children.Add(line);
+                    var line = new System.Windows.Shapes.Line
+                    {
+                        X1 = (startPoint.X - leftTopPoint.X) * 10,
+                        Y1 = (startPoint.Y - leftTopPoint.Y) * 10,
+                        X2 = (endPoint.X - leftTopPoint.X) * 10,
+                        Y2 = (endPoint.Y - leftTopPoint.Y) * 10,
+                        Stroke = Brushes.Black
+                    };
 
-                isHaveNextElement = walls.MoveNext();
+                    RoomCanvas.Children.Add(line);
+                }
             }
         }
     }

@@ -5,9 +5,9 @@ namespace AreaRoomsAPI
 {
     public class GeneratedArea
     {
-        public IReadOnlyDictionary<RoomType, IList<PointD>> Rooms { get; set; }
+        public IList<(RoomType, IList<PointD>)> Rooms { get; set; }
 
-        public GeneratedArea(IReadOnlyDictionary<RoomType, IList<PointD>> rooms)
+        public GeneratedArea(IList<(RoomType, IList<PointD>)> rooms)
         {
             Rooms = rooms;
         }

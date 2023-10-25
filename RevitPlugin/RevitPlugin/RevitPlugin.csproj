@@ -59,6 +59,8 @@
     <Compile Include="Rooms.xaml.cs">
       <DependentUpon>Rooms.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TestData.cs" />
+    <Compile Include="TransformData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Rooms.xaml">
