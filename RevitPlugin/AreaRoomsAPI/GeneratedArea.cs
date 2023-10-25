@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AreaRoomsAPI.Info;
+using System.Collections.Generic;
 
 namespace AreaRoomsAPI
 {

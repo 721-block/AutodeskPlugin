@@ -47,16 +47,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AreaInfo.cs" />
-    <Compile Include="AreaType.cs" />
-    <Compile Include="AreaRoomsFormatsInfo.cs" />
+    <Compile Include="Info\AreaInfo.cs" />
+    <Compile Include="Info\AreaType.cs" />
+    <Compile Include="Info\AreaRoomsFormatsInfo.cs" />
+    <Compile Include="GeneratedArea.cs" />
+    <Compile Include="Info\Interfaces\Shape.cs" />
+    <Compile Include="Info\RoomInfo.cs" />
     <Compile Include="PointD.cs" />
-    <Compile Include="RoomFormat.cs" />
+    <Compile Include="Info\RoomFormat.cs" />
     <Compile Include="RoomsGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoomType.cs" />
-    <Compile Include="Wall.cs" />
-    <Compile Include="WallType.cs" />
+    <Compile Include="Info\RoomType.cs" />
+    <Compile Include="Info\Wall.cs" />
+    <Compile Include="Info\WallType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
