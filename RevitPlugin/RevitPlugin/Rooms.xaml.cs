@@ -24,7 +24,6 @@ namespace RevitPlugin
             this.walls = walls.GetCurveLoopIterator();
             leftTopPoint = this.walls.Current.GetEndPoint(0);
             rooms = GenerateRooms();
-
             DrawLines();
         }
 
@@ -44,10 +43,10 @@ namespace RevitPlugin
         {
             foreach (var pair in rooms.Rooms)
             {
-                for (var i = 0; i < pair.Item2.Count - 1; i++)
+                for (var i = 0; i < pair.Item2.Count; i++)
                 {
                     var startPoint = pair.Item2[i];
-                    var endPoint = pair.Item2[i + 1];
+                    var endPoint = pair.Item2[(i + 1) % pair.Item2.Count];
 
                     var line = new System.Windows.Shapes.Line
                     {
