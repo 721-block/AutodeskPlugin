@@ -71,8 +71,6 @@ namespace AreaRoomsAPI
             var tree = new RoomsTreeNode(new Shape(areaPoints), 0);
             var isDivisionByY = tree.shape.Height > tree.shape.Width;
 
-            var leftShape = 
-
             if (CanInsertRoom(tree.shape, 1))
             {
 
@@ -87,12 +85,12 @@ namespace AreaRoomsAPI
 
         private bool CanInsertRoom(Shape shape, int depth)
         {
-            if (depth ==)
+            return true;
         }
 
         private RoomsTreeNode CreateTree(RoomsTreeNode tree)
         {
-
+            return null;
         }
 
         private class RoomsTreeNode
