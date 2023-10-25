@@ -20,3 +20,6 @@ D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\bin\Debug\RevitPlugin.pd
 D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\Rooms.baml
 D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin.g.resources
 D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin.csproj.CoreCompileInputs.cache
+C:\Users\anton\AutodeskPlugin\RevitPlugin\RevitPlugin\bin\Debug\AreaRoomsAPI.dll
+C:\Users\anton\AutodeskPlugin\RevitPlugin\RevitPlugin\bin\Debug\AreaRoomsAPI.pdb
+C:\Users\anton\AutodeskPlugin\RevitPlugin\RevitPlugin\obj\Debug\RevitPlugin.csproj.CopyComplete
