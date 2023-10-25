@@ -66,5 +66,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AreaRoomsAPI\AreaRoomsAPI.csproj">
+      <Project>{c11b2e95-e778-41f5-80db-57d7b3df8366}</Project>
+      <Name>AreaRoomsAPI</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
