@@ -14,7 +14,7 @@ namespace RevitPlugin
         {
             var data = new List<(RoomType, IList<PointD>)>
             {
-                (RoomType.Default, new List<PointD> { new PointD(0, 0), new PointD(0, 10),  new PointD(10, 10), new PointD(10, 0)})
+                (RoomType.Default, new List<PointD> { new PointD(0, 0), new PointD(0, 100),  new PointD(10, 100), new PointD(10, 0)})
             };
             return new GeneratedArea(data);
         }
