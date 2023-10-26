@@ -70,24 +70,62 @@ namespace AreaRoomsAPI.Info
             return Math.Abs(area) / 2;
         }
 
-        public IList<Shape> SplitInHalf(bool isSplitByY)
+        public (IList<Shape>, IList<PointD> connection) SplitInHalf(bool isSplitByY)
         {
             var shapes = new Shape[2];
 
+            var leftSide = Points.
+                OrderByDescending(x => isSplitByY ? x.Y : -x.X).
+                ThenBy(point => isSplitByY ? point.X : point.Y).
+                Take(2).
+                ToArray();
+            var rightSide = Points.
+                OrderBy(point => isSplitByY ? point.Y : -point.X).
+                ThenByDescending(points => isSplitByY ? points.X : points.Y).
+                Take(2).
+                ToArray();
+
+            var center = (isSplitByY ? Height : Width) / 2;
+            var connectionLine = isSplitByY ? 
+                new List<PointD>() { new PointD(leftSide[1].X, leftSide[1].Y - center), new PointD(leftSide[1].X, leftSide[1].Y - center) } : 
+                new List<PointD>() { new PointD(rightSide[1].X - center, rightSide[1].Y), new PointD(rightSide[0].X - center, rightSide[0].Y) };
+
             if (isSplitByY)
             {
-                var topSide = Points.OrderByDescending(x => x.Y).ThenBy(point => point.X).Take(2).ToArray();
-                var bottomSide = Points.OrderBy(point => point.Y).ThenByDescending(points => points.X).Take(2).ToArray();
-                var center = Height / 2;
-
-                shapes[0] = new Shape(new PointD[4]{ topSide[0], topSide[1], new PointD(topSide[1].X, topSide[1].Y - center), new PointD(topSide[0].X, center + topSide[0].Y) });
+                shapes[0] = GetYShape(leftSide, center);
+                shapes[1] = GetYShape(rightSide, -center);
             }
             else
             {
-
+                shapes[0] = GetXShape(rightSide, -center);
+                shapes[1] = GetXShape(leftSide, center);
             }
 
-            return shapes;
+            Shape GetYShape(PointD[] side, double bias)
+            {
+                return new Shape(new PointD[4]
+                {
+                    side[0],
+                    side[1],
+                    new PointD(side[1].X, side[1].Y + bias),
+                    new PointD(side[0].X, side[0].Y + bias)
+                });
+            }
+
+            Shape GetXShape(PointD[] side, double bias)
+            {
+                return new Shape(new PointD[4]
+                {
+                    side[0],
+                    side[1],
+                    new PointD(side[1].X + bias, side[1].Y),
+                    new PointD(side[0].X + bias, side[0].Y)
+                });
+            }
+
+            return (shapes, connectionLine);
+
+            
         }
     }
 }
