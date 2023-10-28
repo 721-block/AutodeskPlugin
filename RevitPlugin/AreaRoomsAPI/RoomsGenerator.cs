@@ -153,7 +153,7 @@ namespace AreaRoomsAPI
 
             public RoomsTreeNode(Shape shape, int depth)
             {
-                this.Shape = shape;
+                Shape = shape;
                 this.depth = depth;
             }
 
