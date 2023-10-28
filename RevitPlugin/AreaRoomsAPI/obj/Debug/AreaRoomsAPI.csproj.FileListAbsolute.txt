@@ -1,15 +1,3 @@
-D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\AreaRoomsAPI\bin\Debug\AreaRoomsAPI.dll
-D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\AreaRoomsAPI\bin\Debug\AreaRoomsAPI.pdb
-D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\AreaRoomsAPI\obj\Debug\AreaRoomsAPI.csproj.AssemblyReference.cache
-D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\AreaRoomsAPI\obj\Debug\AreaRoomsAPI.csproj.CoreCompileInputs.cache
-D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\AreaRoomsAPI\obj\Debug\AreaRoomsAPI.dll
-D:\proga\project\AutodeskPlugin\RevitPlugin\RevitPlugin\AreaRoomsAPI\obj\Debug\AreaRoomsAPI.pdb
-D:\proga\project\AutodeskPlugin\RevitPlugin\AreaRoomsAPI\bin\Debug\AreaRoomsAPI.dll
-D:\proga\project\AutodeskPlugin\RevitPlugin\AreaRoomsAPI\bin\Debug\AreaRoomsAPI.pdb
-D:\proga\project\AutodeskPlugin\RevitPlugin\AreaRoomsAPI\obj\Debug\AreaRoomsAPI.csproj.AssemblyReference.cache
-D:\proga\project\AutodeskPlugin\RevitPlugin\AreaRoomsAPI\obj\Debug\AreaRoomsAPI.csproj.CoreCompileInputs.cache
-D:\proga\project\AutodeskPlugin\RevitPlugin\AreaRoomsAPI\obj\Debug\AreaRoomsAPI.dll
-D:\proga\project\AutodeskPlugin\RevitPlugin\AreaRoomsAPI\obj\Debug\AreaRoomsAPI.pdb
 C:\Users\anton\AutodeskPlugin\RevitPlugin\AreaRoomsAPI\bin\Debug\AreaRoomsAPI.dll
 C:\Users\anton\AutodeskPlugin\RevitPlugin\AreaRoomsAPI\bin\Debug\AreaRoomsAPI.pdb
 C:\Users\anton\AutodeskPlugin\RevitPlugin\AreaRoomsAPI\obj\Debug\AreaRoomsAPI.csproj.AssemblyReference.cache
