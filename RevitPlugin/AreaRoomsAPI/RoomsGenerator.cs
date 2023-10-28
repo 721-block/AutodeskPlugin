@@ -110,7 +110,7 @@ namespace AreaRoomsAPI
                 var isDivisionByY = tree.Shape.Height > tree.Shape.Width;
                 
 
-                if (count == rooms.Count)
+                if (count == rooms.Count - 1)
                 {
                     tree.Shape = new RoomInfo(tree.Shape.Points.ToArray(), roomsPriorityQueue.Dequeue());
                     continue;
