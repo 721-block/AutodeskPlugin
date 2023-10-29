@@ -15,7 +15,12 @@ namespace RevitPlugin
         public static IList<AreaRoomsAPI.Info.Wall> TransformAutodeskWallsToApi(Curve balconyWall, Curve entranceWall, CurveLoopIterator walls)
         {
             var result = new List<AreaRoomsAPI.Info.Wall>();
-            var isHaveNextElement = true;
+            var isHaveNextElement = walls.MoveNext();
+            var balconyStartPoint = new PointD(balconyWall.GetEndPoint(0).X, balconyWall.GetEndPoint(0).Y);
+            var balconyEndPoint = new PointD(balconyWall.GetEndPoint(1).X, balconyWall.GetEndPoint(1).Y);
+
+            var entranceStartPoint = new PointD(entranceWall.GetEndPoint(0).X, entranceWall.GetEndPoint(0).Y);
+            var entranceEndPoint = new PointD(entranceWall.GetEndPoint(1).X, entranceWall.GetEndPoint(1).Y);
 
             while (isHaveNextElement)
             {
@@ -24,11 +29,11 @@ namespace RevitPlugin
                 var endPoint = new PointD(wall.GetEndPoint(1).X, wall.GetEndPoint(1).Y);
                 var wallType = AreaRoomsAPI.Info.WallType.Standart;
 
-                if (wall.Id == balconyWall.Id)
+                if (startPoint == balconyStartPoint && endPoint == balconyEndPoint)
                 {
                     wallType = AreaRoomsAPI.Info.WallType.Balcony;
                 }
-                else if (wall.Id == entranceWall.Id)
+                else if (startPoint == entranceStartPoint && endPoint == entranceEndPoint)
                 {
                     wallType = AreaRoomsAPI.Info.WallType.Enter;
                 }
