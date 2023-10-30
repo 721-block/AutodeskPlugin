@@ -69,15 +69,42 @@ namespace AreaRoomsAPI
 
         private IList<PointD> AddCorridor(RoomsTreeNode tree)
         {
-            var firstConnection = tree.Connection;
-            var maxLength = tree.leftNext.Connection.Select(x => x.X).Concat(tree.rightNext.Connection.Select(x => x.X)).Max();
-            tree.rightNext.ResizeForCorridor(Side.Bottom, formats.formats[RoomType.Corridor].MinWidth);
+            var lengths = GetLength(tree);
+            var length = lengths.left < lengths.right ? lengths.right : lengths.left;
+            var isByY = tree.Connection[0].Y == tree.Connection[1].Y;
+
+            if (isByY)
+            {
+                var nextTree = lengths.left > lengths.right ? tree.leftNext : tree.rightNext;
+                nextTree.ResizeForCorridor(lengths.left > lengths.right ? Side.Bottom : Side.Top, formats.formats[RoomType.Corridor].MinWidth);
+            }
+            else
+            {
+                var nextTree = lengths.left > lengths.right ? tree.leftNext.rightNext : tree.rightNext.rightNext;
+                nextTree.ResizeForCorridor(lengths.left > lengths.right ? Side.Left : Side.Right, formats.formats[RoomType.Corridor].MinWidth);
+            }
+
             return new PointD[4] { 
-                firstConnection[0], 
-                new PointD(firstConnection[0].X - maxLength, firstConnection[0].Y), 
-                new PointD(firstConnection[0].X - maxLength, firstConnection[0].Y + formats.formats[RoomType.Corridor].MinWidth), 
-                new PointD(firstConnection[0].X, firstConnection[0].Y + formats.formats[RoomType.Corridor].MinWidth) 
+                tree.Connection[0], 
+                new PointD(tree.Connection[0].X + formats.formats[RoomType.Corridor].MinWidth, tree.Connection[0].Y), 
+                new PointD(tree.Connection[0].X + formats.formats[RoomType.Corridor].MinWidth, tree.Connection[0].Y + length), 
+                new PointD(tree.Connection[0].X, tree.Connection[0].Y + length) 
             }; 
+        }
+
+        private (double left, double right) GetLength(RoomsTreeNode tree)
+        {
+            var connection = tree.Connection;
+            var isByY = connection[0].Y == connection[1].Y;
+            var left = (tree.leftNext.Connection ?? new List<PointD>())
+                .Select(x => isByY ? x.X - connection[0].X : x.Y - connection[0].Y)
+                .FirstOrDefault();
+            var right = (tree.rightNext.Connection ?? new List<PointD>())
+                .Select(x => isByY ? x.X - connection[0].X : x.Y - connection[0].Y)
+                .FirstOrDefault();
+
+            return (left, right);
+
         }
 
         private void ResizeRooms(RoomsTreeNode tree)

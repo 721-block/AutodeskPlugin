@@ -31,7 +31,7 @@ namespace AreaRoomsAPI
 
         public override bool Equals(object obj)
         {
-            if (!(obj is PointF))
+            if (!(obj is PointD))
             {
                 return false;
             }

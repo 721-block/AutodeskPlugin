@@ -87,13 +87,13 @@ namespace AreaRoomsAPI.Info
 
             var center = (isSplitByY ? Height : Width) / 2;
             var connectionLine = isSplitByY ? 
-                new List<PointD>() { new PointD(leftSide[1].X, leftSide[1].Y - center), new PointD(leftSide[1].X, leftSide[1].Y - center) } : 
+                new List<PointD>() { new PointD(leftSide[1].X, leftSide[1].Y - center), new PointD(leftSide[0].X, leftSide[0].Y - center) } : 
                 new List<PointD>() { new PointD(rightSide[1].X - center, rightSide[1].Y), new PointD(rightSide[0].X - center, rightSide[0].Y) };
 
             if (isSplitByY)
             {
-                shapes[0] = GetYShape(leftSide, center);
-                shapes[1] = GetYShape(rightSide, -center);
+                shapes[0] = GetYShape(leftSide, -center);
+                shapes[1] = GetYShape(rightSide, center);
             }
             else
             {
@@ -124,8 +124,6 @@ namespace AreaRoomsAPI.Info
             }
 
             return (shapes, connectionLine);
-
-            
         }
     }
 }
