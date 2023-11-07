@@ -57,10 +57,10 @@ namespace RevitPlugin
 
                     var line = new System.Windows.Shapes.Line
                     {
-                        X1 = (startPoint.X - leftTopPoint.X) * 10,
-                        Y1 = (startPoint.Y - leftTopPoint.Y) * 10,
-                        X2 = (endPoint.X - leftTopPoint.X) * 10,
-                        Y2 = (endPoint.Y - leftTopPoint.Y) * 10,
+                        X1 = (startPoint.X - leftTopPoint.X) * 25,
+                        Y1 = (startPoint.Y - leftTopPoint.Y) * 25,
+                        X2 = (endPoint.X - leftTopPoint.X) * 25,
+                        Y2 = (endPoint.Y - leftTopPoint.Y) * 25,
                         Stroke = Brushes.Black
                     };
 
