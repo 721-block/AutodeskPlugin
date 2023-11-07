@@ -1,7 +1,11 @@
 ﻿using AreaRoomsAPI;
 using AreaRoomsAPI.Info;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Architecture;
+using Autodesk.Revit.UI;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,19 +16,22 @@ namespace RevitPlugin
     {
         private Curve balconyWall;
         private Curve entranceWall;
-        private CurveLoopIterator walls;
+        private List<Curve> walls;
         private XYZ leftTopPoint;
         private GeneratedArea rooms;
+        private readonly Document document;
 
-        public Rooms(GeometryObject balconyWall, GeometryObject entranceWall, CurveLoop walls)
+        public Rooms(GeometryObject balconyWall, GeometryObject entranceWall, CurveLoop walls, Document document)
         {
             InitializeComponent();
             this.balconyWall = balconyWall as Curve;
             this.entranceWall = entranceWall as Curve;
-            this.walls = walls.GetCurveLoopIterator();
-            leftTopPoint = this.walls.Current.GetEndPoint(0);
+            this.walls = TransformData.ParseCurveIterator(walls.GetCurveLoopIterator());
+            this.document = document;
+            leftTopPoint = GetLeftAndRightPoints(this.walls).Item1;
             rooms = GenerateRooms();
             DrawLines();
+            //CreateAppartment();
         }
 
         public GeneratedArea GenerateRooms()
@@ -60,6 +67,60 @@ namespace RevitPlugin
                     RoomCanvas.Children.Add(line);
                 }
             }
+        }
+
+        public void CreateAppartment()
+        {
+            using (var transaction = new Transaction(document, "Create appartment"))
+            {
+                foreach (var pair in rooms.Rooms)
+                {
+                    var curves = new List<Curve>();
+                    var level = document.ActiveView.GenLevel;
+
+                    for (var i = 0; i < pair.Item2.Count; i++)
+                    {
+                        var line = pair.Item2[i];
+                        var nextLine = pair.Item2[(i + 1) % pair.Item2.Count];
+                        var startPoint = new XYZ(line.X, line.Y, leftTopPoint.Z);
+                        var endPoint = new XYZ(nextLine.X, nextLine.Y, leftTopPoint.Z);
+                        curves.Add(Line.CreateBound(startPoint, endPoint));
+                    }
+
+                    var (leftPoint, rightPoint) = GetLeftAndRightPoints(curves);
+
+                    transaction.Start();
+                    Autodesk.Revit.DB.Wall.Create(document, Line.CreateBound(leftPoint, rightPoint), level.Id, false);
+                    transaction.Commit();
+
+                    // document.Create.NewFamilyInstance();
+                }
+            }
+        }
+
+        public (XYZ, XYZ) GetLeftAndRightPoints(List<Curve> curves)
+        {
+            var leftCurve = curves[0];
+            var rightCurve = curves[0];
+
+            for (var i = 0; i < curves.Count; i++)
+            {
+                var point = curves[i].GetEndPoint(0);
+                var leftPoint = leftCurve.GetEndPoint(0);
+                var rightPoint = rightCurve.GetEndPoint(0);
+
+                if (point.X < leftPoint.X && point.Y < leftPoint.Y)
+                {
+                    leftCurve = curves[i];
+                }
+
+                if (point.X > rightPoint.X && point.Y > rightPoint.Y)
+                {
+                    rightCurve = curves[i];
+                }
+            }
+
+            return (leftCurve.GetEndPoint(0), rightCurve.GetEndPoint(0));
         }
     }
 }
