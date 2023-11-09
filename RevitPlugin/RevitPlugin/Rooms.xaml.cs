@@ -1,13 +1,9 @@
 ﻿using AreaRoomsAPI;
 using AreaRoomsAPI.Info;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Architecture;
-using Autodesk.Revit.UI;
+using Autodesk.Revit.DB.ExtensibleStorage;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace RevitPlugin
@@ -31,7 +27,7 @@ namespace RevitPlugin
             leftTopPoint = GetLeftAndRightPoints(this.walls).Item1;
             rooms = GenerateRooms();
             DrawLines();
-            //CreateAppartment();
+            CreateAppartment();
         }
 
         public GeneratedArea GenerateRooms()
@@ -71,31 +67,13 @@ namespace RevitPlugin
 
         public void CreateAppartment()
         {
-            using (var transaction = new Transaction(document, "Create appartment"))
+            var curves = new List<List<Curve>>();
+            foreach (var pair in rooms.Rooms)
             {
-                foreach (var pair in rooms.Rooms)
-                {
-                    var curves = new List<Curve>();
-                    var level = document.ActiveView.GenLevel;
-
-                    for (var i = 0; i < pair.Item2.Count; i++)
-                    {
-                        var line = pair.Item2[i];
-                        var nextLine = pair.Item2[(i + 1) % pair.Item2.Count];
-                        var startPoint = new XYZ(line.X, line.Y, leftTopPoint.Z);
-                        var endPoint = new XYZ(nextLine.X, nextLine.Y, leftTopPoint.Z);
-                        curves.Add(Line.CreateBound(startPoint, endPoint));
-                    }
-
-                    var (leftPoint, rightPoint) = GetLeftAndRightPoints(curves);
-
-                    transaction.Start();
-                    Autodesk.Revit.DB.Wall.Create(document, Line.CreateBound(leftPoint, rightPoint), level.Id, false);
-                    transaction.Commit();
-
-                    // document.Create.NewFamilyInstance();
-                }
+                curves.Add(AutodeskAPICreator.GetCurvesByPoints(pair.Item2, document));
             }
+
+            AutodeskAPICreator.CreateRooms(curves, document);
         }
 
         public (XYZ, XYZ) GetLeftAndRightPoints(List<Curve> curves)

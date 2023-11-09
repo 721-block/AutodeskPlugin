@@ -19,8 +19,6 @@ namespace RevitPlugin
             var apartmentGeometry = appartment.GetGeometryObjectFromReference(appartmentReference) as Face;
             var walls = apartmentGeometry.GetEdgesAsCurveLoops()[0];
 
-            /*var x = document.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType.Element);
-            var el = document.Document.GetElement(x);*/
             //TaskDialog.Show("Выбор стены с балконом", "Выберите стену, где будет находиться балкон");
             var balconyReference = document.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType.Edge);
             var balcony = document.Document.GetElement(balconyReference.ElementId);
