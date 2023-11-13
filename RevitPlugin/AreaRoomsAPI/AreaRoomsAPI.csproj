@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NewGenerator.cs" />
+    <Compile Include="Info\Leaf.cs" />
     <Compile Include="Side.cs" />
     <Compile Include="Info\AreaInfo.cs" />
     <Compile Include="Info\AreaType.cs" />

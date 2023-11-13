@@ -38,7 +38,7 @@ namespace RevitPlugin
             var roomsGenerator = new RoomsGenerator(areaInfo,
                 new List<RoomType> { RoomType.Corridor, RoomType.Kitchen, RoomType.Bathroom, RoomType.Default },
                 AreaRoomsFormatsInfo.GetAreaFormatsInfo(AreaType.Economy));
-
+            //var ans = roomsGenerator.GenerateArea();
             return roomsGenerator.GenerateArea();
         }
 
