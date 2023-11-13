@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace AreaRoomsAPI.Info
     {
         public readonly double AspectRatio = 0.5; 
 
-        public readonly ReadOnlyDictionary<RoomType, RoomFormat> formats;
+        private readonly ReadOnlyDictionary<RoomType, RoomFormat> formats;
 
         private static AreaRoomsFormatsInfo economyAreaRoomsFormatsInfo => new AreaRoomsFormatsInfo(new Dictionary<RoomType, RoomFormat>
         {
@@ -23,6 +24,14 @@ namespace AreaRoomsAPI.Info
             {RoomType.Corridor, new RoomFormat(minWidth: 1.1, maxWidth: 1.4, maxSquare: 5) },
             {RoomType.Wardrobe, new RoomFormat(minWidth: 0.5, maxWidth: 1, minSquare: 0.25) }
         });
+
+        public RoomFormat this[RoomType roomType]
+        {
+            get
+            {
+                return formats[roomType];
+            }
+        }
 
         public AreaRoomsFormatsInfo(IDictionary<RoomType, RoomFormat> formats) 
         { 

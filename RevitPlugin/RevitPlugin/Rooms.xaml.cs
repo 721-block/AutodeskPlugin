@@ -32,11 +32,12 @@ namespace RevitPlugin
         public GeneratedArea GenerateRooms()
         {
 
-            var areaInfo = new AreaInfo(TransformData.TransformAutodeskWallsToApi(balconyWall, entranceWall, walls));
+            var areaInfo = new AreaInfo(
+                TransformData.TransformAutodeskWallsToApi(balconyWall, entranceWall, walls),
+                0.0, new List<RoomType> { RoomType.Corridor, RoomType.Kitchen, RoomType.Bathroom, RoomType.Default }
+                );
 
-            var roomsGenerator = new RoomsGenerator(areaInfo,
-                new List<RoomType> { RoomType.Corridor, RoomType.Kitchen, RoomType.Bathroom, RoomType.Default },
-                AreaRoomsFormatsInfo.GetAreaFormatsInfo(AreaType.Economy));
+            var roomsGenerator = new RoomsGenerator(areaInfo, AreaRoomsFormatsInfo.GetAreaFormatsInfo(AreaType.Economy));
 
             return roomsGenerator.GenerateArea();
         }
