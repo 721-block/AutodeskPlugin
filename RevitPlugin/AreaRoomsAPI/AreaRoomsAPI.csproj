@@ -31,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GeneticSharp.Domain, Version=2.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GeneticSharp.2.6.0\lib\net462\GeneticSharp.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="GeneticSharp.Infrastructure.Framework, Version=2.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GeneticSharp.2.6.0\lib\net462\GeneticSharp.Infrastructure.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -47,14 +53,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithm\AreaChromosome.cs" />
+    <Compile Include="Algorithm\AreaFitness.cs" />
+    <Compile Include="Algorithm\RoomGene.cs" />
+    <Compile Include="Geometric\Point.cs" />
     <Compile Include="Side.cs" />
     <Compile Include="Info\AreaInfo.cs" />
     <Compile Include="Info\AreaType.cs" />
     <Compile Include="Info\AreaRoomsFormatsInfo.cs" />
     <Compile Include="GeneratedArea.cs" />
-    <Compile Include="Info\Interfaces\Shape.cs" />
+    <Compile Include="Geometric\Shape.cs" />
     <Compile Include="Info\RoomInfo.cs" />
-    <Compile Include="PointD.cs" />
+    <Compile Include="Geometric\PointD.cs" />
     <Compile Include="Info\RoomFormat.cs" />
     <Compile Include="RoomsGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,5 +75,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

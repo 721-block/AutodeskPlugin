@@ -1,9 +1,9 @@
 ﻿using AreaRoomsAPI;
 using AreaRoomsAPI.Info;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.ExtensibleStorage;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace RevitPlugin
@@ -12,28 +12,25 @@ namespace RevitPlugin
     {
         private Curve balconyWall;
         private Curve entranceWall;
-        private List<Curve> walls;
+        private CurveLoopIterator walls;
         private XYZ leftTopPoint;
         private GeneratedArea rooms;
-        private readonly Document document;
 
-        public Rooms(GeometryObject balconyWall, GeometryObject entranceWall, CurveLoop walls, Document document)
+        public Rooms(GeometryObject balconyWall, GeometryObject entranceWall, CurveLoop walls)
         {
             InitializeComponent();
             this.balconyWall = balconyWall as Curve;
             this.entranceWall = entranceWall as Curve;
-            this.walls = TransformData.ParseCurveIterator(walls.GetCurveLoopIterator());
-            this.document = document;
-            leftTopPoint = GetLeftAndRightPoints(this.walls).Item1;
+            this.walls = walls.GetCurveLoopIterator();
+            leftTopPoint = this.walls.Current.GetEndPoint(0);
             rooms = GenerateRooms();
             DrawLines();
-            CreateAppartment();
         }
 
         public GeneratedArea GenerateRooms()
         {
 
-            var areaInfo = new AreaInfo(TransformData.TransformAutodeskWallsToApi(balconyWall, entranceWall, walls));
+            var areaInfo = new AreaInfo(TransformData.TransformAutodeskWallsToApi(balconyWall, entranceWall, walls), 0);
 
             var roomsGenerator = new RoomsGenerator(areaInfo,
                 new List<RoomType> { RoomType.Corridor, RoomType.Kitchen, RoomType.Bathroom, RoomType.Default },
@@ -53,52 +50,16 @@ namespace RevitPlugin
 
                     var line = new System.Windows.Shapes.Line
                     {
-                        X1 = (startPoint.X - leftTopPoint.X) * 25,
-                        Y1 = (startPoint.Y - leftTopPoint.Y) * 25,
-                        X2 = (endPoint.X - leftTopPoint.X) * 25,
-                        Y2 = (endPoint.Y - leftTopPoint.Y) * 25,
+                        X1 = (startPoint.X - leftTopPoint.X) * 100 + 500,
+                        Y1 = (startPoint.Y - leftTopPoint.Y) * 100 + 500,
+                        X2 = (endPoint.X - leftTopPoint.X) * 100 + 500,
+                        Y2 = (endPoint.Y - leftTopPoint.Y) * 10 + 500,
                         Stroke = Brushes.Black
                     };
 
                     RoomCanvas.Children.Add(line);
                 }
             }
-        }
-
-        public void CreateAppartment()
-        {
-            var curves = new List<List<Curve>>();
-            foreach (var pair in rooms.Rooms)
-            {
-                curves.Add(AutodeskAPICreator.GetCurvesByPoints(pair.Item2, document));
-            }
-
-            AutodeskAPICreator.CreateRooms(curves, document);
-        }
-
-        public (XYZ, XYZ) GetLeftAndRightPoints(List<Curve> curves)
-        {
-            var leftCurve = curves[0];
-            var rightCurve = curves[0];
-
-            for (var i = 0; i < curves.Count; i++)
-            {
-                var point = curves[i].GetEndPoint(0);
-                var leftPoint = leftCurve.GetEndPoint(0);
-                var rightPoint = rightCurve.GetEndPoint(0);
-
-                if (point.X < leftPoint.X && point.Y < leftPoint.Y)
-                {
-                    leftCurve = curves[i];
-                }
-
-                if (point.X > rightPoint.X && point.Y > rightPoint.Y)
-                {
-                    rightCurve = curves[i];
-                }
-            }
-
-            return (leftCurve.GetEndPoint(0), rightCurve.GetEndPoint(0));
         }
     }
 }
