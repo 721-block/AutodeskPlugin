@@ -7,7 +7,8 @@ using GeneticSharp.Domain.Crossovers;
 using GeneticSharp.Domain.Mutations;
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
+using GeneticSharp.Domain.Terminations;
 
 namespace AreaRoomsAPI
 {
@@ -20,7 +21,8 @@ namespace AreaRoomsAPI
             {RoomType.Wardrobe, 1 },
             {RoomType.Toilet, 1 },
             {RoomType.Bathroom, 2 },
-            {RoomType.Loggia, 2 }
+            {RoomType.Loggia, 2 },
+            {RoomType.Corridor, 2 },
         };
 
 
@@ -43,12 +45,18 @@ namespace AreaRoomsAPI
             
             var fitness = new AreaFitness(formatsInfo, areaInfo.RoomTypes, roomsPriority);
             var chromosome = new AreaChromosome(areaInfo, formatsInfo[RoomType.Corridor].RecommendedWidth / 2, areaInfo.RoomTypes.Count);
-            var population = new Population(50, 50, chromosome);
-            var selection = new TournamentSelection(3, false);
-            var crossover = new OnePointCrossover(areaInfo.RoomTypes.Count);
+            var population = new Population(50, 100, chromosome);
+            var selection = new TournamentSelection(3);
+            var crossover = new OnePointCrossover(areaInfo.RoomTypes.Count / 2);
             var mutation = new TworsMutation();
+            var termination = new GenerationNumberTermination(100);
             
             var ga = new GeneticAlgorithm(population, fitness, selection, crossover, mutation);
+            ga.Termination = termination;
+            ga.Start();
+
+            var bestChromosome = (AreaChromosome)ga.BestChromosome;
+            var genes = bestChromosome.GetGenes().Select(x => (RoomGene)x.Value).ToArray();
 
             return new GeneratedArea(list);
         }

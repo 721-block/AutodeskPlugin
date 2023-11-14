@@ -43,7 +43,7 @@ namespace AreaRoomsAPI.Algorithm
 
             for (int i = 0; i < roomsCount; i++)
             {
-                ReplaceGene(i, new Gene(new RoomGene(new Point(coordinatesX[0], coordinatesY[0]), cellSize)));
+                ReplaceGene(i, new Gene(new RoomGene(new Point(coordinatesX[i], coordinatesY[i]), cellSize)));
             }
 
             cellsCount = cellsCountWidth * cellsCountHeight;

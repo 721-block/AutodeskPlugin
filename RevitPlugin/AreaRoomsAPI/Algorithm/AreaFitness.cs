@@ -49,7 +49,8 @@ namespace AreaRoomsAPI.Algorithm
                     nextPoint.Y >= 0 && nextPoint.Y < cellsCountHeight))
                 {
                     roomGenes[pointInfo.index].AddCell(nextPoint);
-                    queue.Enqueue(pointInfo);
+                    queue.Enqueue((pointInfo.index, nextPoint));
+                    hashSet.Add(nextPoint);
                 }
             }
 
@@ -69,7 +70,7 @@ namespace AreaRoomsAPI.Algorithm
             {
                 for (int y = -1; y <= 1; y++)
                 {
-                    if (x != y)
+                    if (x == 0 ^ y == 0)
                     {
                         yield return new Point(point.X + x, point.Y + y);
                     }

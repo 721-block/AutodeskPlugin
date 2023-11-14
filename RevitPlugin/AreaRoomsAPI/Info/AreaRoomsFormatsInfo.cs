@@ -21,7 +21,7 @@ namespace AreaRoomsAPI.Info
             {RoomType.Toilet, new RoomFormat(minWidth: 0.8, minSquare: 1) },
             {RoomType.Kitchen, new RoomFormat(minWidth: 2.8, minSquare: 10) },
             {RoomType.Loggia, new RoomFormat(minWidth: 0.8, maxWidth: 1.5, maxSquare: 3) },
-            {RoomType.Corridor, new RoomFormat(minWidth: 1.1, maxWidth: 1.4, maxSquare: 5) },
+            {RoomType.Corridor, new RoomFormat(recommendedWidth: 1.1, maxSquare: 5) },
             {RoomType.Wardrobe, new RoomFormat(minWidth: 0.5, maxWidth: 1, minSquare: 0.25) }
         });
 

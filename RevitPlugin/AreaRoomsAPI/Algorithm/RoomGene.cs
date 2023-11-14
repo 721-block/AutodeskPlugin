@@ -18,7 +18,7 @@ namespace AreaRoomsAPI.Algorithm
 
         private double cellSize;
 
-        private List<Point> cells;
+        private List<Point> cells = new List<Point>();
 
         public RoomGene(Point point, double cellSize) 
         { 
@@ -49,6 +49,11 @@ namespace AreaRoomsAPI.Algorithm
         public void ClearCells()
         {
             cells.Clear();
+            Area = 0;
+            minXCell = int.MaxValue;
+            minYCell = int.MaxValue;
+            maxXCell = -1;
+            maxYCell = -1;
         }
     }
 }
