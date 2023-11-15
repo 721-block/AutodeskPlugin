@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using AreaRoomsAPI.Geometric;
 using AreaRoomsAPI.Info;
 using GeneticSharp.Domain.Chromosomes;
 using GeneticSharp.Domain.Randomizations;
+using NUnit.Framework.Constraints;
 
 namespace AreaRoomsAPI.Algorithm
 {
@@ -20,6 +22,7 @@ namespace AreaRoomsAPI.Algorithm
         public readonly double Height;
         private readonly double minCellSize;
         private readonly AreaInfo areaInfo;
+        private List<Point>[] roomsPoints;
 
         public AreaChromosome(AreaInfo areaInfo, double minCellSize, int roomsCount) : base(roomsCount)
         {
@@ -27,8 +30,13 @@ namespace AreaRoomsAPI.Algorithm
             Width = areaInfo.Width;
             Height = areaInfo.Height;
             this.minCellSize = minCellSize;
-            var nod = FindNOD(Width, Height);
+            roomsPoints = new List<Point>[roomsCount];
+            for (int i = 0; i < roomsCount; i++)
+            {
+                roomsPoints[i] = new List<Point>();
+            }
 
+            var nod = FindNOD(Width, Height);
             while (nod / 2 > minCellSize)
             {
                 nod /= 2;
@@ -38,8 +46,8 @@ namespace AreaRoomsAPI.Algorithm
             cellsCountWidth = (int)(Width / cellSize);
             cellsCountHeight = (int)(Height / cellSize);
 
-            var coordinatesX = RandomizationProvider.Current.GetInts(roomsCount, 0, cellsCountWidth);
-            var coordinatesY = RandomizationProvider.Current.GetInts(roomsCount, 0, cellsCountHeight);
+            var coordinatesX = RandomizationProvider.Current.GetUniqueInts(roomsCount, 0, cellsCountWidth);
+            var coordinatesY = RandomizationProvider.Current.GetUniqueInts(roomsCount, 0, cellsCountHeight);
 
             for (int i = 0; i < roomsCount; i++)
             {
@@ -85,6 +93,19 @@ namespace AreaRoomsAPI.Algorithm
             var clone = base.Clone() as AreaChromosome;
 
             return clone;
+        }
+
+        public void AddCell(int geneIndex, Point point)
+        {
+            roomsPoints[geneIndex].Add(point);
+        }
+
+        public void ClearCells()
+        {
+            for (int i = 0; i < roomsPoints.Length; i++)
+            {
+                roomsPoints[i].Clear();
+            }
         }
     }
 }

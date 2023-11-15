@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GeneticSharp.Domain.Terminations;
+using System.Runtime.Remoting.Channels;
 
 namespace AreaRoomsAPI
 {
@@ -42,21 +43,33 @@ namespace AreaRoomsAPI
         public GeneratedArea GenerateArea()
         {
             var list = new List<(RoomType, IList<PointD>)>();
-            
             var fitness = new AreaFitness(formatsInfo, areaInfo.RoomTypes, roomsPriority);
             var chromosome = new AreaChromosome(areaInfo, formatsInfo[RoomType.Corridor].RecommendedWidth / 2, areaInfo.RoomTypes.Count);
             var population = new Population(50, 100, chromosome);
             var selection = new TournamentSelection(3);
-            var crossover = new OnePointCrossover(areaInfo.RoomTypes.Count / 2);
-            var mutation = new TworsMutation();
-            var termination = new GenerationNumberTermination(100);
+            var crossover = new OrderedCrossover();
+            var mutation = new ReverseSequenceMutation();
+            var termination = new GenerationNumberTermination(200);
             
             var ga = new GeneticAlgorithm(population, fitness, selection, crossover, mutation);
             ga.Termination = termination;
+
+            ga.GenerationRan += (sender, e) =>
+            {
+                if (ga.GenerationsNumber == 99)
+                {
+
+                }
+            };
+
             ga.Start();
+
+            
 
             var bestChromosome = (AreaChromosome)ga.BestChromosome;
             var genes = bestChromosome.GetGenes().Select(x => (RoomGene)x.Value).ToArray();
+            
+
 
             return new GeneratedArea(list);
         }

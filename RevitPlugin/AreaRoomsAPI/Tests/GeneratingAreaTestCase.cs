@@ -16,10 +16,10 @@ namespace AreaRoomsAPI.Tests
         {
             var walls = new List<Wall>()
             {
-                new Wall(new PointD(0, 0), new PointD(20, 0), WallType.Standart),
-                new Wall(new PointD(20, 0), new PointD(20, 20), WallType.Standart),
-                new Wall(new PointD(20, 20), new PointD(0, 20), WallType.Standart),
-                new Wall(new PointD(0, 20), new PointD(0, 0), WallType.Standart),
+                new Wall(new PointD(0, 0), new PointD(10, 0), WallType.Standart),
+                new Wall(new PointD(10, 0), new PointD(10, 10), WallType.Standart),
+                new Wall(new PointD(10, 10), new PointD(0, 10), WallType.Standart),
+                new Wall(new PointD(0, 10), new PointD(0, 0), WallType.Standart),
             };
 
             var areaInfo = new AreaInfo(walls, 0, new List<RoomType> { RoomType.Default, RoomType.Corridor, RoomType.Bathroom, RoomType.Kitchen});

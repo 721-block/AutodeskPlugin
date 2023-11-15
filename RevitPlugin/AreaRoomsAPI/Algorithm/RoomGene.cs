@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AreaRoomsAPI.Algorithm
 {
-    public class RoomGene
+    public struct RoomGene
     {
         public Point Point;
         private int minXCell;
@@ -18,17 +18,19 @@ namespace AreaRoomsAPI.Algorithm
 
         private double cellSize;
 
-        private List<Point> cells = new List<Point>();
-
         public RoomGene(Point point, double cellSize) 
         { 
             Point = point;
+            minXCell = point.X;
+            minYCell = point.Y;
+            maxXCell = point.X;
+            maxYCell = point.Y;
+            Area = cellSize * cellSize;
             this.cellSize = cellSize;
         }
 
         public void AddCell(Point point)
         {
-            cells.Add(point);
             minXCell = Math.Min(minXCell, point.X);
             minYCell = Math.Min(minYCell, point.Y);
             maxXCell = Math.Max(maxXCell, point.X);
@@ -48,12 +50,31 @@ namespace AreaRoomsAPI.Algorithm
 
         public void ClearCells()
         {
-            cells.Clear();
-            Area = 0;
-            minXCell = int.MaxValue;
-            minYCell = int.MaxValue;
-            maxXCell = -1;
-            maxYCell = -1;
+            Area = cellSize * cellSize;
+            minXCell = Point.X;
+            minYCell = Point.Y;
+            maxXCell = Point.X;
+            maxYCell = Point.Y;
+        }
+
+        public static bool operator==(RoomGene left, RoomGene right)
+        {
+            return left.Point == right.Point;
+        }
+
+        public static bool operator !=(RoomGene left, RoomGene right)
+        {
+            return left.Point != right.Point;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is RoomGene roomGene))
+            {
+                return false;
+            }
+
+            return roomGene == this;
         }
     }
 }

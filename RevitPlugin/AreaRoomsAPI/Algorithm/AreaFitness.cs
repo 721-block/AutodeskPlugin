@@ -4,6 +4,7 @@ using GeneticSharp.Domain.Chromosomes;
 using GeneticSharp.Domain.Fitnesses;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,7 +38,9 @@ namespace AreaRoomsAPI.Algorithm
                 roomGene.ClearCells();
                 roomGenes[i] = roomGene;
                 queue.Enqueue((i, roomGene.Point));
+                hashSet.Add(roomGene.Point);
             }
+            areaChromosome.ClearCells();
 
             while (queue.Count > 0)
             {
@@ -49,17 +52,22 @@ namespace AreaRoomsAPI.Algorithm
                     nextPoint.Y >= 0 && nextPoint.Y < cellsCountHeight))
                 {
                     roomGenes[pointInfo.index].AddCell(nextPoint);
+                    areaChromosome.AddCell(pointInfo.index, nextPoint);
                     queue.Enqueue((pointInfo.index, nextPoint));
                     hashSet.Add(nextPoint);
                 }
             }
 
-            foreach (var roomGene in roomGenes)
+            for (var i = 0; i < roomGenes.Length; i++)
             {
-                var rectangleArea = roomGene.GetWidth() * roomGene.GetHeight();
-                fitness -= Math.Abs(rectangleArea - roomGene.Area);
+                var rectangleArea = roomGenes[i].GetWidth() * roomGenes[i].GetHeight();
+                areaChromosome.ReplaceGene(i, new Gene(roomGenes[i]));
+                fitness -= Math.Abs(rectangleArea - roomGenes[i].Area);
             }
 
+
+            var diff = roomGenes.Length - roomGenes.Distinct().Count();
+            fitness -= diff * 1000;
             areaChromosome.Fitness = fitness;
             return fitness;
         }
