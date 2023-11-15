@@ -59,7 +59,7 @@ namespace AreaRoomsAPI.Algorithm
 
         private double FindNOD(double a, double b)
         {
-            if (b == 0)
+            if (b <= 0.05)
             {
                 return a;
             }

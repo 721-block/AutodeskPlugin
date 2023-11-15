@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GeneticSharp.Domain.Terminations;
 using System.Runtime.Remoting.Channels;
+using GeneticSharp.Infrastructure.Framework.Threading;
 
 namespace AreaRoomsAPI
 {
@@ -52,6 +53,7 @@ namespace AreaRoomsAPI
             var termination = new GenerationNumberTermination(200);
             
             var ga = new GeneticAlgorithm(population, fitness, selection, crossover, mutation);
+            ga.TaskExecutor = new TplTaskExecutor();
             ga.Termination = termination;
 
             ga.GenerationRan += (sender, e) =>
