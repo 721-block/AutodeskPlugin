@@ -42,7 +42,7 @@ namespace AreaRoomsAPI
 
         public GeneratedArea GenerateArea()
         {
-            var list = new List<(RoomType, IList<PointD>)>();
+            //var list = new List<(RoomType, IList<PointD>)>();
             var fitness = new AreaFitness(formatsInfo, areaInfo.RoomTypes, roomsPriority);
             var chromosome = new AreaChromosome(areaInfo, formatsInfo[RoomType.Corridor].RecommendedWidth / 2, areaInfo.RoomTypes.Count);
             var population = new Population(50, 100, chromosome);
@@ -68,8 +68,10 @@ namespace AreaRoomsAPI
 
             var bestChromosome = (AreaChromosome)ga.BestChromosome;
             var genes = bestChromosome.GetGenes().Select(x => (RoomGene)x.Value).ToArray();
-            
 
+            var ans = bestChromosome.GetRoomsBorders().Select(x => AreaChromosome.ConvertPointListToPointDList(x));
+
+            var list = ans.Select(x => (RoomType.Default, x)).ToList();
 
             return new GeneratedArea(list);
         }

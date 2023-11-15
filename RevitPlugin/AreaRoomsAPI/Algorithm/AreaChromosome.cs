@@ -107,5 +107,41 @@ namespace AreaRoomsAPI.Algorithm
                 roomsPoints[i].Clear();
             }
         }
+
+        public static IList<PointD> ConvertPointListToPointDList(IList<Point> points)
+        {
+            return points.Select(p => new PointD(p.X, p.Y)).ToList();
+        }
+
+        public IList<IList<Point>> GetRoomsBorders()
+        {
+            return roomsPoints.Select(x => GetPointsMinimalConvexHull(x)).ToList();
+        }
+
+        private static IList<Point> GetPointsMinimalConvexHull(IList<Point> points)
+        {
+            var basePoint = points.OrderBy(point => point.Y).ThenBy(point => point.X).First();
+            points.Remove(basePoint);
+            var pointsSortedByAtan2 = points.OrderBy(point => Math.Atan2(point.Y - basePoint.Y, point.X - basePoint.X)).ToList();
+
+            var convexHull = new List<Point>();
+            convexHull.Add(basePoint);
+            convexHull.Add(pointsSortedByAtan2.First());
+
+            for (var i = 1; i < pointsSortedByAtan2.Count(); i++)
+            {
+                while (isLeftRotate(convexHull[convexHull.Count-2], convexHull[convexHull.Count-1], pointsSortedByAtan2[i]))
+                {
+                    convexHull.RemoveAt(convexHull.Count-1);
+                }
+                convexHull.Add(pointsSortedByAtan2[i]);
+            }
+            return convexHull;
+        }
+
+        private static bool isLeftRotate (Point A, Point B, Point C)
+        {
+            return (B.X - A.X) * (C.Y - B.Y) - (B.Y - A.Y) * (C.X - B.X) < 0;
+        }
     }
 }
