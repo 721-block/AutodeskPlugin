@@ -126,7 +126,7 @@ namespace AreaRoomsAPI.Algorithm
         private static IList<Point> GetPointsMinimalConvexHull(IList<Point> pointsList)
         {
             var points = new List<Point>(pointsList);
-            var basePoint = points.OrderBy(point => point.Y).ThenBy(point => point.X).First();
+            var basePoint = points.OrderBy(point => point.Y).ThenByDescending(point => point.X).First();
             points.Remove(basePoint);
             var pointsSortedByAtan2 = points.OrderBy(point => Math.Atan2(point.Y - basePoint.Y, point.X - basePoint.X)).ToList();
 
@@ -136,7 +136,7 @@ namespace AreaRoomsAPI.Algorithm
 
             for (var i = 1; i < pointsSortedByAtan2.Count; i++)
             {
-                while (isLeftRotate(convexHull[convexHull.Count-2], convexHull[convexHull.Count-1], pointsSortedByAtan2[i]))
+                while (!isLeftRotate(convexHull[convexHull.Count-2], convexHull[convexHull.Count-1], pointsSortedByAtan2[i]))
                 {
                     convexHull.RemoveAt(convexHull.Count-1);
                 }
@@ -147,7 +147,7 @@ namespace AreaRoomsAPI.Algorithm
 
         private static bool isLeftRotate (Point A, Point B, Point C)
         {
-            return (B.X - A.X) * (C.Y - B.Y) - (B.Y - A.Y) * (C.X - B.X) < 0;
+            return (B.X - A.X) * (C.Y - B.Y) - (B.Y - A.Y) * (C.X - B.X) >= 0;
         }
     }
 }
