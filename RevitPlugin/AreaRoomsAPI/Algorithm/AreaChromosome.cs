@@ -108,9 +108,14 @@ namespace AreaRoomsAPI.Algorithm
             }
         }
 
-        public static IList<PointD> ConvertPointListToPointDList(IList<Point> points)
+        public double GetCellSize()
         {
-            return points.Select(p => new PointD(p.X, p.Y)).ToList();
+            return cellSize;
+        }
+
+        public IList<PointD> ConvertPointListToPointDList(IList<Point> points, PointD basePoint)
+        {
+            return points.Select(p => new PointD(basePoint.X + p.X * cellSize + cellSize, basePoint.Y + p.Y * cellSize + cellSize)).ToList();
         }
 
         public IList<IList<Point>> GetRoomsBorders()
@@ -118,8 +123,9 @@ namespace AreaRoomsAPI.Algorithm
             return roomsPoints.Select(x => GetPointsMinimalConvexHull(x)).ToList();
         }
 
-        private static IList<Point> GetPointsMinimalConvexHull(IList<Point> points)
+        private static IList<Point> GetPointsMinimalConvexHull(IList<Point> pointsList)
         {
+            var points = new List<Point>(pointsList);
             var basePoint = points.OrderBy(point => point.Y).ThenBy(point => point.X).First();
             points.Remove(basePoint);
             var pointsSortedByAtan2 = points.OrderBy(point => Math.Atan2(point.Y - basePoint.Y, point.X - basePoint.X)).ToList();
@@ -128,7 +134,7 @@ namespace AreaRoomsAPI.Algorithm
             convexHull.Add(basePoint);
             convexHull.Add(pointsSortedByAtan2.First());
 
-            for (var i = 1; i < pointsSortedByAtan2.Count(); i++)
+            for (var i = 1; i < pointsSortedByAtan2.Count; i++)
             {
                 while (isLeftRotate(convexHull[convexHull.Count-2], convexHull[convexHull.Count-1], pointsSortedByAtan2[i]))
                 {

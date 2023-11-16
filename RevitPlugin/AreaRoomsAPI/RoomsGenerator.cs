@@ -71,7 +71,9 @@ namespace AreaRoomsAPI
             var bestChromosome = (AreaChromosome)ga.BestChromosome;
             var genes = bestChromosome.GetGenes().Select(x => (RoomGene)x.Value).ToArray();
 
-            var ans = bestChromosome.GetRoomsBorders().Select(x => AreaChromosome.ConvertPointListToPointDList(x));
+            var basePoint = areaInfo.Points.OrderBy(p => p.X).ThenBy(p => p.Y).First();
+            
+            var ans = bestChromosome.GetRoomsBorders().Select(x => bestChromosome.ConvertPointListToPointDList(x, basePoint)).ToList();
 
             var list = ans.Select(x => (RoomType.Default, x)).ToList();
 
