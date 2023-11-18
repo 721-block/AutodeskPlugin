@@ -51,8 +51,8 @@ namespace AreaRoomsAPI
             {
                 int hash = 257;
 
-                hash = hash * 23 + X.GetHashCode().GetHashCode();
-                hash = hash * 23 + Y.GetHashCode().GetHashCode();
+                hash = hash * 101 + X.GetHashCode().GetHashCode();
+                hash = hash * 101 + Y.GetHashCode().GetHashCode();
 
                 return hash;
             }
