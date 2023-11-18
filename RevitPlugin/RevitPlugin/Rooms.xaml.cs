@@ -26,7 +26,7 @@ namespace RevitPlugin
             leftTopPoint = GetLeftAndRightPoints(this.walls).Item1;
             rooms = GenerateRooms();
             DrawLines();
-            CreateAppartment();
+            //CreateAppartment();
         }
 
         public GeneratedArea GenerateRooms()

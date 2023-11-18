@@ -120,34 +120,79 @@ namespace AreaRoomsAPI.Algorithm
 
         public IList<IList<Point>> GetRoomsBorders()
         {
-            return roomsPoints.Select(x => GetPointsMinimalConvexHull(x)).ToList();
+            return roomsPoints.Select(x => GetSingleRoomBorder(GetRoomYLayers(x))).ToList();
         }
 
-        private static IList<Point> GetPointsMinimalConvexHull(IList<Point> pointsList)
+        private SortedDictionary<int, IList<Point>> GetRoomYLayers(IList<Point> points)
         {
-            var points = new List<Point>(pointsList);
-            var basePoint = points.OrderBy(point => point.Y).ThenByDescending(point => point.X).First();
-            points.Remove(basePoint);
-            var pointsSortedByAtan2 = points.OrderBy(point => Math.Atan2(point.Y - basePoint.Y, point.X - basePoint.X)).ToList();
-
-            var convexHull = new List<Point>();
-            convexHull.Add(basePoint);
-            convexHull.Add(pointsSortedByAtan2.First());
-
-            for (var i = 1; i < pointsSortedByAtan2.Count; i++)
+            var ans = new SortedDictionary<int, IList<Point>>();
+            foreach (var point in points.OrderBy(p => p.Y))
             {
-                while (!isLeftRotate(convexHull[convexHull.Count-2], convexHull[convexHull.Count-1], pointsSortedByAtan2[i]))
+                if (!ans.ContainsKey(point.Y))
                 {
-                    convexHull.RemoveAt(convexHull.Count-1);
+                    ans.Add(point.Y, new List<Point>());
                 }
-                convexHull.Add(pointsSortedByAtan2[i]);
+                ans[point.Y].Add(point);
             }
-            return convexHull;
+            var fullAns = new SortedDictionary<int, IList<Point>>();
+            foreach (var key in ans.Keys)
+            {
+                fullAns[key] = new List<Point> { ans[key].OrderBy(p => p.X).First(), ans[key].OrderByDescending(p => p.X).First() };
+            }
+            return fullAns;
         }
 
-        private static bool isLeftRotate (Point A, Point B, Point C)
+        private IList<Point> GetSingleRoomBorder(SortedDictionary<int, IList<Point>> pointsLayers)
         {
-            return (B.X - A.X) * (C.Y - B.Y) - (B.Y - A.Y) * (C.X - B.X) >= 0;
+            var left = new List<Point>();
+            var right = new List<Point>();
+            var flag = false;
+            var prevPair = (new Point(0, 0), new Point(0, 0));
+            var maxKey = pointsLayers.Keys.Max();
+            foreach (var key in pointsLayers.Keys)
+            {
+                if (!flag)
+                {
+                    flag = true;
+                    prevPair = (pointsLayers[key][0], pointsLayers[key][1]);
+                    left.Add(prevPair.Item1);
+                    right.Add(prevPair.Item2);
+                    continue;
+                }
+                var currentPair = (pointsLayers[key][0], pointsLayers[key][1]);
+
+                if (currentPair.Item1.X > prevPair.Item1.X)
+                {
+                    left.Add(new Point(currentPair.Item1.X, prevPair.Item1.Y));
+                    left.Add(currentPair.Item1);
+                    prevPair.Item1 = currentPair.Item1;
+                } else if (currentPair.Item1.X < prevPair.Item1.X)
+                {
+                    left.Add(new Point(prevPair.Item1.X, currentPair.Item1.Y));
+                    left.Add(currentPair.Item1);
+                    prevPair.Item1 = currentPair.Item1;
+                } else if (key == maxKey)
+                {
+                    left.Add(currentPair.Item1);
+                }
+
+                if (currentPair.Item2.X > prevPair.Item2.X)
+                {
+                    right.Add(new Point(prevPair.Item2.X, currentPair.Item2.Y));
+                    right.Add(currentPair.Item2);
+                    prevPair.Item2 = currentPair.Item2;
+                } else if (currentPair.Item2.X < prevPair.Item2.X)
+                {
+                    right.Add(new Point(currentPair.Item2.X, prevPair.Item2.Y));
+                    right.Add(currentPair.Item2);
+                    prevPair.Item2 = currentPair.Item2;
+                } else if (key == maxKey)
+                {
+                    right.Add(currentPair.Item2);
+                }
+            }
+            right.Reverse();
+            return left.Concat(right).ToList();
         }
     }
 }

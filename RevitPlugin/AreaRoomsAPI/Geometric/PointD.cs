@@ -39,7 +39,7 @@ namespace AreaRoomsAPI
             PointD pointD = (PointD)obj;
             if (this == pointD)
             {
-                return pointD.GetType().Equals(GetType());
+                return Math.Abs(this.X - pointD.X) < 10e-6 && Math.Abs(this.Y - pointD.Y) < 10e-6;
             }
 
             return false;
@@ -47,7 +47,15 @@ namespace AreaRoomsAPI
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            unchecked
+            {
+                int hash = 257;
+
+                hash = hash * 23 + X.GetHashCode().GetHashCode();
+                hash = hash * 23 + Y.GetHashCode().GetHashCode();
+
+                return hash;
+            }
         }
     }
 }
