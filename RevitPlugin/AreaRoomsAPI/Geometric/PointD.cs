@@ -19,6 +19,12 @@ namespace AreaRoomsAPI
             Y = y;
         }
 
+        public PointD(PointD pointD)
+        {
+            X = pointD.X;
+            Y = pointD.Y;
+        }
+
         public static bool operator ==(PointD left, PointD right)
         {
             return left.X == right.X && left.Y == right.Y;

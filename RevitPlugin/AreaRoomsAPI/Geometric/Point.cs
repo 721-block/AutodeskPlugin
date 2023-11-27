@@ -17,6 +17,12 @@ namespace AreaRoomsAPI.Geometric
             Y = y;
         }
 
+        public Point(Point point)
+        {
+            X = point.X;
+            Y = point.Y;
+        }
+
         public static bool operator ==(Point left, Point right)
         {
             return left.X == right.X && left.Y == right.Y;

@@ -113,17 +113,17 @@ namespace AreaRoomsAPI.Algorithm
             return cellSize;
         }
 
-        public IList<PointD> ConvertPointListToPointDList(IList<Point> points, PointD basePoint)
+        public IList<PointD> ConvertPointListToPointDList(IList<PointD> points, PointD basePoint)
         {
-            return points.Select(p => new PointD(basePoint.X + p.X * cellSize + cellSize, basePoint.Y + p.Y * cellSize + cellSize)).ToList();
+            return points.Select(p => new PointD(basePoint.X + p.X, basePoint.Y + p.Y)).ToList();
         }
 
-        public IList<IList<Point>> GetRoomsBorders()
+        public IList<IList<PointD>> GetRoomsBorders()
         {
-            return roomsPoints.Select(x => GetSingleRoomBorder(GetRoomYLayers(x))).ToList();
+            return roomsPoints.Select(x => GetRoomYLayers(x)).ToList();
         }
 
-        private SortedDictionary<int, IList<Point>> GetRoomYLayers(IList<Point> points)
+        private IList<PointD> GetRoomYLayers(IList<Point> points)
         {
             var ans = new SortedDictionary<int, IList<Point>>();
             foreach (var point in points.OrderBy(p => p.Y))
@@ -135,11 +135,45 @@ namespace AreaRoomsAPI.Algorithm
                 ans[point.Y].Add(point);
             }
             var fullAns = new SortedDictionary<int, IList<Point>>();
+            var prevPair = (new Point(0, 0), new Point(0, 0));
+            var flag = true;
+            var left = new List<PointD>();
+            var right = new List<PointD>();
+            var maxKey = ans.Keys.Max();
             foreach (var key in ans.Keys)
             {
-                fullAns[key] = new List<Point> { ans[key].OrderBy(p => p.X).First(), ans[key].OrderByDescending(p => p.X).First() };
+                if (flag)
+                {
+                    flag = false;
+                    prevPair = (new Point(ans[key].OrderBy(p => p.X).First()), new Point(ans[key].OrderBy(p => p.X).Last()));
+                    left.Add(new PointD(prevPair.Item1.X * cellSize, prevPair.Item1.Y * cellSize));
+                    right.Add(new PointD(prevPair.Item2.X * cellSize + cellSize, prevPair.Item2.Y * cellSize));
+                    continue;
+                }
+                var currentPair = (new Point(ans[key].OrderBy(p => p.X).First()), new Point(ans[key].OrderByDescending(p => p.X).First()));
+                if (currentPair.Item1.X != prevPair.Item1.X)
+                {
+                    left.Add(new PointD(prevPair.Item1.X * cellSize, currentPair.Item1.Y * cellSize));
+                    left.Add(new PointD(currentPair.Item1.X * cellSize, currentPair.Item1.Y * cellSize));
+                    prevPair.Item1 = new Point(currentPair.Item1);
+                } else if (key == maxKey)
+                {
+                    left.Add(new PointD(currentPair.Item1.X * cellSize, currentPair.Item1.Y * cellSize + cellSize));
+                }
+
+                if (currentPair.Item2.X != prevPair.Item2.X)
+                {
+                    right.Add(new PointD(prevPair.Item2.X * cellSize + cellSize, currentPair.Item2.Y * cellSize));
+                    right.Add(new PointD(currentPair.Item2.X * cellSize + cellSize, currentPair.Item2.Y * cellSize));
+                    prevPair.Item2 = new Point(currentPair.Item2);
+                } else if (key == maxKey)
+                {
+                    right.Add(new PointD(currentPair.Item2.X * cellSize + cellSize, currentPair.Item2.Y * cellSize + cellSize));
+                }
             }
-            return fullAns;
+
+            right.Reverse();
+            return left.Concat(right).ToList();
         }
 
         private IList<Point> GetSingleRoomBorder(SortedDictionary<int, IList<Point>> pointsLayers)
@@ -166,12 +200,14 @@ namespace AreaRoomsAPI.Algorithm
                     left.Add(new Point(currentPair.Item1.X, prevPair.Item1.Y));
                     left.Add(currentPair.Item1);
                     prevPair.Item1 = currentPair.Item1;
-                } else if (currentPair.Item1.X < prevPair.Item1.X)
+                }
+                else if (currentPair.Item1.X < prevPair.Item1.X)
                 {
                     left.Add(new Point(prevPair.Item1.X, currentPair.Item1.Y));
                     left.Add(currentPair.Item1);
                     prevPair.Item1 = currentPair.Item1;
-                } else if (key == maxKey)
+                }
+                else if (key == maxKey)
                 {
                     left.Add(currentPair.Item1);
                 }
@@ -181,12 +217,14 @@ namespace AreaRoomsAPI.Algorithm
                     right.Add(new Point(prevPair.Item2.X, currentPair.Item2.Y));
                     right.Add(currentPair.Item2);
                     prevPair.Item2 = currentPair.Item2;
-                } else if (currentPair.Item2.X < prevPair.Item2.X)
+                }
+                else if (currentPair.Item2.X < prevPair.Item2.X)
                 {
                     right.Add(new Point(currentPair.Item2.X, prevPair.Item2.Y));
                     right.Add(currentPair.Item2);
                     prevPair.Item2 = currentPair.Item2;
-                } else if (key == maxKey)
+                }
+                else if (key == maxKey)
                 {
                     right.Add(currentPair.Item2);
                 }

@@ -26,7 +26,7 @@ namespace RevitPlugin
             leftTopPoint = GetLeftAndRightPoints(this.walls).Item1;
             rooms = GenerateRooms();
             DrawLines();
-            //CreateAppartment();
+            CreateAppartment();
         }
 
         public GeneratedArea GenerateRooms()
@@ -44,8 +44,12 @@ namespace RevitPlugin
 
         public void DrawLines()
         {
+            // stack to debug with different rooms colors
+            var stack = new Stack<SolidColorBrush>(new List<SolidColorBrush>{Brushes.Black, Brushes.Blue, Brushes.Red, Brushes.Gold});
+            
             foreach (var pair in rooms.Rooms)
             {
+                var stroke = stack.Pop();
                 for (var i = 0; i < pair.Item2.Count; i++)
                 {
                     var startPoint = pair.Item2[i];
@@ -57,7 +61,8 @@ namespace RevitPlugin
                         Y1 = (startPoint.Y - leftTopPoint.Y) * 25,
                         X2 = (endPoint.X - leftTopPoint.X) * 25,
                         Y2 = (endPoint.Y - leftTopPoint.Y) * 25,
-                        Stroke = Brushes.Black
+                        //Stroke = Brushes.Black,
+                        Stroke = stroke
                     };
 
                     RoomCanvas.Children.Add(line);
