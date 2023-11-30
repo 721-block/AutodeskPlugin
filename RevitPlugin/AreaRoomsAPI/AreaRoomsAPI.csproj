@@ -63,6 +63,7 @@
     <Compile Include="Algorithm\AreaChromosome.cs" />
     <Compile Include="Algorithm\AreaFitness.cs" />
     <Compile Include="Algorithm\RoomGene.cs" />
+    <Compile Include="Geometric\Direction.cs" />
     <Compile Include="Geometric\Point.cs" />
     <Compile Include="Side.cs" />
     <Compile Include="Info\AreaInfo.cs" />

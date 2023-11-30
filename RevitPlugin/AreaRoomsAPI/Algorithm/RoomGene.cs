@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +15,9 @@ namespace AreaRoomsAPI.Algorithm
         private int minYCell;
         private int maxXCell;
         private int maxYCell;
+        public int CellsWidth => maxXCell - minXCell + 1;
+        public int CellsHeight => maxYCell - minYCell + 1;
+
         public double Area { get; private set; }
 
         private double cellSize;
@@ -75,6 +79,11 @@ namespace AreaRoomsAPI.Algorithm
             }
 
             return roomGene == this;
+        }
+
+        public override int GetHashCode()
+        {
+            return Point.GetHashCode();
         }
     }
 }

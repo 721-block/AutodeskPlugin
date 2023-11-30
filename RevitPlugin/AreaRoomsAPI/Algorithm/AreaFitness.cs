@@ -15,6 +15,7 @@ namespace AreaRoomsAPI.Algorithm
     {
         private readonly AreaRoomsFormatsInfo formats;
         private readonly RoomType[] priority;
+        private readonly Direction[] directions = Enum.GetValues(typeof(Direction)).Cast<Direction>().ToArray();
         public AreaFitness(AreaRoomsFormatsInfo formats, IList<RoomType> roomTypes, Dictionary<RoomType, int> roomPriority) 
         {
             this.formats = formats;
@@ -27,7 +28,7 @@ namespace AreaRoomsAPI.Algorithm
             var areaChromosome = (AreaChromosome)chromosome;
             var cellsCountWidth = areaChromosome.cellsCountWidth;
             var cellsCountHeight = areaChromosome.cellsCountHeight;
-            var queue = new Queue<(int index, Point point)>();
+            var queue = new Queue<int>();
             var hashSet = new HashSet<Point>();
             var genes = chromosome.GetGenes();
             var roomGenes = new RoomGene[chromosome.Length];
@@ -37,24 +38,20 @@ namespace AreaRoomsAPI.Algorithm
                 var roomGene = (RoomGene)genes[i].Value;
                 roomGene.ClearCells();
                 roomGenes[i] = roomGene;
-                queue.Enqueue((i, roomGene.Point));
+                queue.Enqueue(i);
                 hashSet.Add(roomGene.Point);
             }
             areaChromosome.ClearCells();
 
             while (queue.Count > 0)
             {
-                var pointInfo = queue.Dequeue();
+                var geneIndex = queue.Dequeue();
+                var gene = roomGenes[geneIndex];
+                (var width, var height) = (gene.CellsWidth,  gene.CellsHeight);
 
-                foreach (var nextPoint in GetDirections(pointInfo.point)
-                    .Where(nextPoint => !hashSet.Contains(nextPoint) && 
-                    nextPoint.X >= 0 && nextPoint.X < cellsCountWidth && 
-                    nextPoint.Y >= 0 && nextPoint.Y < cellsCountHeight))
+                foreach (var nextPoint in directions.OrderBy(x => (int)x % 2 == 1 ? height : width).ThenBy(x => x))
                 {
-                    roomGenes[pointInfo.index].AddCell(nextPoint);
-                    areaChromosome.AddCell(pointInfo.index, nextPoint);
-                    queue.Enqueue((pointInfo.index, nextPoint));
-                    hashSet.Add(nextPoint);
+                    queue.Enqueue(geneIndex);
                 }
             }
 
