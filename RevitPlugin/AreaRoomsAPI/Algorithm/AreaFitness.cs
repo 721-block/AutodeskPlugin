@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,10 +17,19 @@ namespace AreaRoomsAPI.Algorithm
         private readonly AreaRoomsFormatsInfo formats;
         private readonly RoomType[] priority;
         private readonly Direction[] directions = Enum.GetValues(typeof(Direction)).Cast<Direction>().ToArray();
-        public AreaFitness(AreaRoomsFormatsInfo formats, IList<RoomType> roomTypes, Dictionary<RoomType, int> roomPriority) 
+        private readonly int cellWidthCount;
+        private readonly int cellHeightCount;
+        public AreaFitness(
+            AreaRoomsFormatsInfo formats, 
+            IList<RoomType> roomTypes, 
+            Dictionary<RoomType, int> roomPriority, 
+            int cellWidthCount, 
+            int cellHeightCount) 
         {
             this.formats = formats;
             priority = roomTypes.OrderByDescending(x => roomPriority[x]).ToArray();
+            this.cellWidthCount = cellWidthCount;
+            this.cellHeightCount = cellHeightCount;
         }
 
         public double Evaluate(IChromosome chromosome)
@@ -49,10 +59,19 @@ namespace AreaRoomsAPI.Algorithm
                 var gene = roomGenes[geneIndex];
                 (var width, var height) = (gene.CellsWidth,  gene.CellsHeight);
 
-                foreach (var nextPoint in directions.OrderBy(x => (int)x % 2 == 1 ? height : width).ThenBy(x => x))
+                foreach (var side in directions.OrderBy(x => (int)x % 2 == 0 ? height : width).ThenBy(x => x))
                 {
-                    queue.Enqueue(geneIndex);
+                    if ((int)side % 2 == 0)
+                    {
+                        TryFindWidthCells(gene, side, hashSet, out var result);
+                    }
+                    else
+                    {
+                        TryFindHeightCells(gene, side, hashSet, out var result);
+                    }
                 }
+
+                queue.Enqueue(geneIndex);
             }
 
             for (var i = 0; i < roomGenes.Length; i++)
@@ -62,25 +81,60 @@ namespace AreaRoomsAPI.Algorithm
                 fitness -= Math.Abs(rectangleArea - roomGenes[i].Area);
             }
 
-
             var diff = roomGenes.Length - roomGenes.Distinct().Count();
             fitness -= diff * 1000;
             areaChromosome.Fitness = fitness;
             return fitness;
         }
 
-        public IEnumerable<Point> GetDirections(Point point)
+        private bool TryFindWidthCells(RoomGene roomGene, Direction direction, HashSet<Point> points, out List<Point> result)
         {
-            for (int x = -1; x <= 1; x++)
+            result = new List<Point>(roomGene.CellsWidth);
+            var minWidth = roomGene.minXCell;
+            var maxWidth = roomGene.maxXCell + 1;
+            var currentPos = direction == Direction.Top ? roomGene.maxYCell + 1 : roomGene.minYCell - 1;
+            if (currentPos < 0 || currentPos >= cellHeightCount)
             {
-                for (int y = -1; y <= 1; y++)
-                {
-                    if (x == 0 ^ y == 0)
-                    {
-                        yield return new Point(point.X + x, point.Y + y);
-                    }
-                }
+                return false;
             }
+
+            for (int i = minWidth; i < maxWidth; i++)
+            {
+                var nextPoint = new Point(i, currentPos);
+                if (points.Contains(nextPoint))
+                {
+                    return false;
+                }
+
+                result.Add(nextPoint);
+            }
+
+            return true;
+        }
+
+        private bool TryFindHeightCells(RoomGene roomGene, Direction direction, HashSet<Point> points, out List<Point> result)
+        {
+            result = new List<Point>(roomGene.CellsHeight);
+            var minHeight = roomGene.minYCell;
+            var maxHeight = roomGene.maxYCell + 1;
+            var currentPos = direction == Direction.Left ? roomGene.minXCell - 1 : roomGene.maxXCell + 1;
+            if (currentPos < 0 || currentPos >= cellWidthCount)
+            {
+                return false;
+            }
+
+            for (int i = minHeight; i < maxHeight; i++)
+            {
+                var nextPoint = new Point(currentPos, i);
+                if (points.Contains(nextPoint))
+                {
+                    return false;
+                }
+
+                result.Add(nextPoint);
+            }
+
+            return true;
         }
     }
 }

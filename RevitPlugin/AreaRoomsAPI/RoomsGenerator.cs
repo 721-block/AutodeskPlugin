@@ -43,9 +43,8 @@ namespace AreaRoomsAPI
 
         public GeneratedArea GenerateArea()
         {
-            //var list = new List<(RoomType, IList<PointD>)>();
-            var fitness = new AreaFitness(formatsInfo, areaInfo.RoomTypes, roomsPriority);
             var chromosome = new AreaChromosome(areaInfo, formatsInfo[RoomType.Corridor].RecommendedWidth / 2, areaInfo.RoomTypes.Count);
+            var fitness = new AreaFitness(formatsInfo, areaInfo.RoomTypes, roomsPriority, chromosome.cellsCountWidth, chromosome.cellsCountHeight);
             var population = new Population(50, 100, chromosome);
             var selection = new TournamentSelection(3);
             var crossover = new OrderedCrossover();

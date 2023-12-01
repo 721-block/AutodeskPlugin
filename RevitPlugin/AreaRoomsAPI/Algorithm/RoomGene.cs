@@ -11,10 +11,10 @@ namespace AreaRoomsAPI.Algorithm
     public struct RoomGene
     {
         public Point Point;
-        private int minXCell;
-        private int minYCell;
-        private int maxXCell;
-        private int maxYCell;
+        public int minXCell { get; private set; }
+        public int minYCell { get; private set; }
+        public int maxXCell { get; private set; }
+        public int maxYCell { get; private set; }
         public int CellsWidth => maxXCell - minXCell + 1;
         public int CellsHeight => maxYCell - minYCell + 1;
 
