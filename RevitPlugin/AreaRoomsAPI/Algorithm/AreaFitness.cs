@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace AreaRoomsAPI.Algorithm
         private readonly Direction[] directions = Enum.GetValues(typeof(Direction)).Cast<Direction>().ToArray();
         private readonly int cellWidthCount;
         private readonly int cellHeightCount;
+        private readonly bool[,] hashSet;
         public AreaFitness(
             AreaRoomsFormatsInfo formats, 
             IList<RoomType> roomTypes, 
@@ -28,8 +30,10 @@ namespace AreaRoomsAPI.Algorithm
         {
             this.formats = formats;
             priority = roomTypes.OrderByDescending(x => roomPriority[x]).ToArray();
+            hashSet = new bool[cellHeightCount, cellWidthCount];
             this.cellWidthCount = cellWidthCount;
             this.cellHeightCount = cellHeightCount;
+
         }
 
         public double Evaluate(IChromosome chromosome)
@@ -37,7 +41,6 @@ namespace AreaRoomsAPI.Algorithm
             var fitness = 0d;
             var areaChromosome = (AreaChromosome)chromosome;
             var queue = new Queue<int>();
-            var hashSet = new HashSet<Point>();
             var genes = chromosome.GetGenes();
             var roomGenes = new RoomGene[chromosome.Length];
 
@@ -47,7 +50,7 @@ namespace AreaRoomsAPI.Algorithm
                 roomGene.ClearCells();
                 roomGenes[i] = roomGene;
                 queue.Enqueue(i);
-                hashSet.Add(roomGene.Point);
+                hashSet[roomGene.Point.Y, roomGene.Point.X] = true;
             }
             areaChromosome.ClearCells();
 
@@ -63,18 +66,18 @@ namespace AreaRoomsAPI.Algorithm
                     bool isLegit;
                     if ((int)side % 2 == 0)
                     {
-                        isLegit = TryFindWidthCells(gene, side, hashSet, out result);
+                        isLegit = TryFindWidthCells(gene, side, out result);
                     }
                     else
                     {
-                        isLegit = TryFindHeightCells(gene, side, hashSet, out result);
+                        isLegit = TryFindHeightCells(gene, side, out result);
                     }
 
                     if (isLegit)
                     {
                         areaChromosome.AddCells(geneIndex, result);
                         roomGenes[geneIndex].AddCells(result);
-                        AddRange(hashSet, result);
+                        
                         queue.Enqueue(geneIndex);
                         break;
                     }
@@ -89,18 +92,30 @@ namespace AreaRoomsAPI.Algorithm
             var diff = roomGenes.Length - roomGenes.Distinct().Count();
             fitness -= diff * 1000;
             areaChromosome.Fitness = fitness;
+            SetToDefault(hashSet);
             return fitness;
         }
 
-        public static void AddRange(HashSet<Point> hashSet,  IEnumerable<Point> points)
+        private void SetToDefault(bool[,] hashSet)
         {
-            foreach (var point in points)
+            for (int i = 0; i < cellHeightCount; i++)
             {
-                hashSet.Add(point);
+                for (int j = 0; j < cellWidthCount; j++)
+                {
+                    hashSet[i, j] = false;
+                }
             }
         }
 
-        private bool TryFindWidthCells(RoomGene roomGene, Direction direction, HashSet<Point> points, out List<Point> result)
+        private void SetCells(List<Point> cells)
+        {
+            foreach (var cell in cells)
+            {
+                hashSet[cell.Y, cell.X] = true;
+            }
+        }
+
+        private bool TryFindWidthCells(RoomGene roomGene, Direction direction, out List<Point> result)
         {
             result = new List<Point>(roomGene.CellsWidth);
             var minWidth = roomGene.minXCell;
@@ -114,7 +129,7 @@ namespace AreaRoomsAPI.Algorithm
             for (int i = minWidth; i < maxWidth; i++)
             {
                 var nextPoint = new Point(i, currentPos);
-                if (points.Contains(nextPoint))
+                if (hashSet[nextPoint.Y, nextPoint.X])
                 {
                     return false;
                 }
@@ -125,7 +140,7 @@ namespace AreaRoomsAPI.Algorithm
             return true;
         }
 
-        private bool TryFindHeightCells(RoomGene roomGene, Direction direction, HashSet<Point> points, out List<Point> result)
+        private bool TryFindHeightCells(RoomGene roomGene, Direction direction, out List<Point> result)
         {
             result = new List<Point>(roomGene.CellsHeight);
             var minHeight = roomGene.minYCell;
@@ -139,7 +154,7 @@ namespace AreaRoomsAPI.Algorithm
             for (int i = minHeight; i < maxHeight; i++)
             {
                 var nextPoint = new Point(currentPos, i);
-                if (points.Contains(nextPoint))
+                if (hashSet[nextPoint.Y, nextPoint.X])
                 {
                     return false;
                 }

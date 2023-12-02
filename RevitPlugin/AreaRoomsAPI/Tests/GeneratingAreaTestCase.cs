@@ -13,6 +13,7 @@ namespace AreaRoomsAPI.Tests
     {
         [TestCase(24.942546945512731, 15.716982738649051)]
         [TestCase(20, 16)]
+        [TestCase(30.356950254188632, 16.574111909812757)]
         public void TestingRectangleArea(double width, double height)
         {
             var walls = new List<Wall>()
