@@ -57,7 +57,7 @@ namespace AreaRoomsAPI
 
             ga.GenerationRan += (sender, e) =>
             {
-                if (ga.GenerationsNumber == 99)
+                if (ga.GenerationsNumber == 199)
                 {
 
                 }

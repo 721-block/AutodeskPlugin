@@ -22,6 +22,7 @@ namespace AreaRoomsAPI.Algorithm
         public readonly double Height;
         private readonly double minCellSize;
         private readonly AreaInfo areaInfo;
+        private readonly Point[] startPoints;
         private List<Point>[] roomsPoints;
 
         public AreaChromosome(AreaInfo areaInfo, double minCellSize, int roomsCount) : base(roomsCount)
@@ -30,6 +31,7 @@ namespace AreaRoomsAPI.Algorithm
             Width = areaInfo.Width;
             Height = areaInfo.Height;
             this.minCellSize = minCellSize;
+            startPoints = new Point[roomsCount];
             roomsPoints = new List<Point>[roomsCount];
             for (int i = 0; i < roomsCount; i++)
             {
@@ -51,7 +53,10 @@ namespace AreaRoomsAPI.Algorithm
 
             for (int i = 0; i < roomsCount; i++)
             {
-                ReplaceGene(i, new Gene(new RoomGene(new Point(coordinatesX[i], coordinatesY[i]), cellSize)));
+                var point = new Point(coordinatesX[i], coordinatesY[i]);
+                startPoints[i] = point;
+                ReplaceGene(i, new Gene(new RoomGene(point, cellSize)));
+                AddCell(i, point);
             }
 
             cellsCount = cellsCountWidth * cellsCountHeight;
