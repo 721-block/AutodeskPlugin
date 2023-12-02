@@ -36,8 +36,6 @@ namespace AreaRoomsAPI.Algorithm
         {
             var fitness = 0d;
             var areaChromosome = (AreaChromosome)chromosome;
-            var cellsCountWidth = areaChromosome.cellsCountWidth;
-            var cellsCountHeight = areaChromosome.cellsCountHeight;
             var queue = new Queue<int>();
             var hashSet = new HashSet<Point>();
             var genes = chromosome.GetGenes();
@@ -61,24 +59,30 @@ namespace AreaRoomsAPI.Algorithm
 
                 foreach (var side in directions.OrderBy(x => (int)x % 2 == 0 ? height : width).ThenBy(x => x))
                 {
+                    List<Point> result;
+                    bool isLegit;
                     if ((int)side % 2 == 0)
                     {
-                        TryFindWidthCells(gene, side, hashSet, out var result);
+                        isLegit = TryFindWidthCells(gene, side, hashSet, out result);
                     }
                     else
                     {
-                        TryFindHeightCells(gene, side, hashSet, out var result);
+                        isLegit = TryFindHeightCells(gene, side, hashSet, out result);
                     }
-                }
 
-                queue.Enqueue(geneIndex);
+                    if (isLegit)
+                    {
+                        areaChromosome.AddCells(geneIndex, result);
+                        roomGenes[geneIndex].AddCells(result);
+                        queue.Enqueue(geneIndex);
+                        break;
+                    }
+                }           
             }
 
             for (var i = 0; i < roomGenes.Length; i++)
             {
-                var rectangleArea = roomGenes[i].GetWidth() * roomGenes[i].GetHeight();
                 areaChromosome.ReplaceGene(i, new Gene(roomGenes[i]));
-                fitness -= Math.Abs(rectangleArea - roomGenes[i].Area);
             }
 
             var diff = roomGenes.Length - roomGenes.Distinct().Count();

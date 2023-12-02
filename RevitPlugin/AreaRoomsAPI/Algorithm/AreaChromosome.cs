@@ -232,5 +232,13 @@ namespace AreaRoomsAPI.Algorithm
             right.Reverse();
             return left.Concat(right).ToList();
         }
+
+        internal void AddCells(int geneIndex, IEnumerable<Point> points)
+        {
+            foreach (var point in points)
+            {
+                AddCell(geneIndex, point);
+            }
+        }
     }
 }

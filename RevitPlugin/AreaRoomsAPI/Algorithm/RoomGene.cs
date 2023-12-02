@@ -42,6 +42,14 @@ namespace AreaRoomsAPI.Algorithm
             Area += cellSize * cellSize;
         }
 
+        public void AddCells(IEnumerable<Point> points)
+        {
+            foreach (var point in points)
+            {
+                AddCell(point);
+            }
+        }
+
         public double GetWidth()
         {
             return (maxXCell - minXCell + 1) * cellSize;

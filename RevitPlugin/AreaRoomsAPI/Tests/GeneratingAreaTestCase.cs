@@ -22,11 +22,11 @@ namespace AreaRoomsAPI.Tests
                 new Wall(new PointD(0, 15.716982738649051), new PointD(0, 0), WallType.Standart),
             };
 
-            var areaInfo = new AreaInfo(walls, 0, new List<RoomType> { RoomType.Default, RoomType.Corridor, RoomType.Bathroom, RoomType.Kitchen});
+            var areaInfo = new AreaInfo(walls, 0, new List<RoomType> { RoomType.Default, RoomType.Corridor, RoomType.Bathroom, RoomType.Kitchen}, 0);
 
             var roomGenerator = new RoomsGenerator(areaInfo, AreaRoomsFormatsInfo.GetAreaFormatsInfo(AreaType.Economy));
 
-            roomGenerator.GenerateArea();
+            var area = roomGenerator.GenerateArea();
         }
     }
 }
