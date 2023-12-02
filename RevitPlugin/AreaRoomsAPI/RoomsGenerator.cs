@@ -52,7 +52,7 @@ namespace AreaRoomsAPI
             var termination = new GenerationNumberTermination(200);
             
             var ga = new GeneticAlgorithm(population, fitness, selection, crossover, mutation);
-            ga.TaskExecutor = new TplTaskExecutor();
+            ga.TaskExecutor = new LinearTaskExecutor();
             ga.Termination = termination;
 
             ga.GenerationRan += (sender, e) =>

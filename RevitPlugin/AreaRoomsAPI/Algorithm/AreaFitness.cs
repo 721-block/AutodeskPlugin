@@ -74,6 +74,7 @@ namespace AreaRoomsAPI.Algorithm
                     {
                         areaChromosome.AddCells(geneIndex, result);
                         roomGenes[geneIndex].AddCells(result);
+                        AddRange(hashSet, result);
                         queue.Enqueue(geneIndex);
                         break;
                     }
@@ -89,6 +90,14 @@ namespace AreaRoomsAPI.Algorithm
             fitness -= diff * 1000;
             areaChromosome.Fitness = fitness;
             return fitness;
+        }
+
+        public static void AddRange(HashSet<Point> hashSet,  IEnumerable<Point> points)
+        {
+            foreach (var point in points)
+            {
+                hashSet.Add(point);
+            }
         }
 
         private bool TryFindWidthCells(RoomGene roomGene, Direction direction, HashSet<Point> points, out List<Point> result)
