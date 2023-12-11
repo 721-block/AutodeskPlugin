@@ -10,9 +10,9 @@ namespace AreaRoomsAPI.Info
 {
     public class AreaRoomsFormatsInfo
     {
-        public readonly double AspectRatio = 0.5;
+        public readonly double Ratio = 0.5;
 
-        private const double footsInMeter = 3.28084;
+        public const double footsInMeter = 3.28084;
 
         private readonly ReadOnlyDictionary<RoomType, RoomFormat> formats;
 
@@ -23,7 +23,7 @@ namespace AreaRoomsAPI.Info
             {RoomType.Toilet, new RoomFormat(minWidth : 0.8, minSquare : 1) * footsInMeter },
             {RoomType.Kitchen, new RoomFormat(minWidth : 2.8, minSquare : 10) * footsInMeter },
             {RoomType.Loggia, new RoomFormat(minWidth : 0.8, maxWidth : 1.5, maxSquare : 3) * footsInMeter },
-            {RoomType.Corridor, new RoomFormat(recommendedWidth: 1.1, maxSquare: 5) },
+            {RoomType.Corridor, new RoomFormat(recWidth: 1.1, maxSquare: 5) * footsInMeter },
             {RoomType.Wardrobe, new RoomFormat(minWidth : 0.5, maxWidth : 1, minSquare : 0.25) * footsInMeter }
         });
 

@@ -43,21 +43,21 @@ namespace AreaRoomsAPI
 
         public GeneratedArea GenerateArea()
         {
-            var chromosome = new AreaChromosome(areaInfo, formatsInfo[RoomType.Corridor].RecommendedWidth / 2, areaInfo.RoomTypes.Count);
+            var chromosome = new AreaChromosome(areaInfo, formatsInfo[RoomType.Corridor].RecWidth / 2, areaInfo.RoomTypes.Count);
             var fitness = new AreaFitness(formatsInfo, areaInfo.RoomTypes, roomsPriority, chromosome.cellsCountWidth, chromosome.cellsCountHeight);
-            var population = new Population(50, 100, chromosome);
+            var population = new Population(100, 150, chromosome);
             var selection = new TournamentSelection(3);
             var crossover = new OrderedCrossover();
             var mutation = new ReverseSequenceMutation();
-            var termination = new GenerationNumberTermination(200);
+            var termination = new GenerationNumberTermination(100);
             
             var ga = new GeneticAlgorithm(population, fitness, selection, crossover, mutation);
-            ga.TaskExecutor = new TplTaskExecutor();
+            ga.TaskExecutor = new LinearTaskExecutor();
             ga.Termination = termination;
 
             ga.GenerationRan += (sender, e) =>
             {
-                if (ga.GenerationsNumber == 199)
+                if (ga.GenerationsNumber == 99)
                 {
 
                 }

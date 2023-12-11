@@ -37,7 +37,6 @@ namespace AreaRoomsAPI.Algorithm
         public double Evaluate(IChromosome chromosome)
         {
             var hashSet = new bool[cellHeightCount, cellWidthCount];
-            var fitness = 0d;
             var areaChromosome = (AreaChromosome)chromosome;
             var queue = new Queue<int>();
             var genes = chromosome.GetGenes();
@@ -90,10 +89,47 @@ namespace AreaRoomsAPI.Algorithm
                 areaChromosome.ReplaceGene(i, new Gene(roomGenes[i]));
             }
 
+            SetToDefault(hashSet);
+            return CalculateFitness(areaChromosome, roomGenes);
+        }
+
+        private double CalculateFitness(AreaChromosome areaChromosome, RoomGene[] roomGenes)
+        {
+            var fitness = 0d;
             var diff = roomGenes.Length - roomGenes.Distinct().Count();
             fitness -= diff * 1000;
+
+            for (int i = 0; i < roomGenes.Length; i++)
+            {
+                var gene = roomGenes[i];
+                var roomFormat = formats[priority[i]];
+                fitness += CalculateFitnessOfRoom(gene, roomFormat, formats.Ratio);
+            }
+
             areaChromosome.Fitness = fitness;
-            SetToDefault(hashSet);
+            return fitness;
+        }
+
+        private double CalculateFitnessOfRoom(RoomGene gene, RoomFormat format, double ratio)
+        {
+            var fitness = 0d;
+            var square = gene.Area;
+            var minWidth = gene.GetMinWidth();
+            var maxWidth = gene.GetMaxWidth();
+            var roomRatio = maxWidth / minWidth;
+
+            if (format.RecWidth > 0)
+                fitness -= Math.Pow(format.RecWidth - minWidth, 2);
+            else if (minWidth < format.MinWidth)
+                fitness -= 500 + Math.Pow(format.MinWidth - minWidth, 2);
+            else if (minWidth > format.MaxWidth)
+                fitness -= 500 + Math.Pow(minWidth-format.MaxWidth, 2);
+
+            if (square < format.MinSquare)
+                fitness -= 500 + format.MinSquare - square;
+            else if (square > format.MaxSquare)
+                fitness -= 500 + square - format.MaxSquare;
+
             return fitness;
         }
 

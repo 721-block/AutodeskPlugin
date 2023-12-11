@@ -93,5 +93,9 @@ namespace AreaRoomsAPI.Algorithm
         {
             return Point.GetHashCode();
         }
+
+        public double GetMinWidth() => Math.Min(GetWidth(), GetHeight());
+
+        public double GetMaxWidth() => Math.Max(GetWidth(), GetHeight());
     }
 }
