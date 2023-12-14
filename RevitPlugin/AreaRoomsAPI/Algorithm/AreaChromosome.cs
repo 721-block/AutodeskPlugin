@@ -39,7 +39,7 @@ namespace AreaRoomsAPI.Algorithm
             }
 
             var nod = FindNOD(Width, Height);
-            while (nod / 2 > minCellSize)
+            while (nod > minCellSize)
             {
                 nod /= 2;
             }

@@ -12,7 +12,7 @@ namespace AreaRoomsAPI.Tests
     public class GeneratingAreaTestCase
     {
         [TestCase(24.942546945512731, 15.716982738649051)]
-        [TestCase(30, 16)]
+        [TestCase(22, 22)]
         [TestCase(10, 8)]
         [TestCase(30.356950254188632, 16.574111909812757)]
         public void TestingRectangleArea(double width, double height)
