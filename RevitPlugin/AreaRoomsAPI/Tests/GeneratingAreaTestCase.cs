@@ -25,7 +25,10 @@ namespace AreaRoomsAPI.Tests
                 new EnterWall(new PointD(0, height), new PointD(0, 0), (height/2 - 1, height/2 + 1)),
             };
 
-            var areaInfo = new AreaInfo(walls, 0, new List<RoomType> { RoomType.Default, RoomType.Corridor, RoomType.Bathroom, RoomType.Kitchen}, 0);
+            var areaInfo = new AreaInfo(
+                walls, 
+                0, 
+                new List<RoomType> { RoomType.Default, RoomType.Corridor, RoomType.Bathroom, RoomType.Kitchen});
 
             var roomGenerator = new RoomsGenerator(areaInfo, AreaRoomsFormatsInfo.GetAreaFormatsInfo(AreaType.Economy));
 

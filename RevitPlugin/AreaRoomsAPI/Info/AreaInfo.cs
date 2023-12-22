@@ -11,14 +11,12 @@ namespace AreaRoomsAPI.Info
     {
         public readonly IList<Wall> Walls;
         public readonly IList<RoomType> RoomTypes;
-        public readonly double DoorPos;
 
-        public AreaInfo(IList<Wall> walls, double margin, IList<RoomType> roomTypes, double doorPos) : base(walls)
+        public AreaInfo(IList<Wall> walls, double margin, IList<RoomType> roomTypes) : base(walls)
         {
             Walls = walls;
             Margin = margin;
             RoomTypes = roomTypes;
-            DoorPos = doorPos;
         }
     }
 }
