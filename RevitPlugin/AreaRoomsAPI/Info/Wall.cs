@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace AreaRoomsAPI.Info
 {
-    public class Wall
+    public abstract class Wall
     {
         public readonly PointD startPoint;
         public readonly PointD endPoint;
-        public readonly WallType wallType;
+        public readonly WallType WallType;
 
         public Wall(PointD startPoint, PointD endPoint, WallType wallType)
         {
             this.startPoint = startPoint;
             this.endPoint = endPoint;
-            this.wallType = wallType;
+            WallType = wallType;
         }
     }
 }

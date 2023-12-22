@@ -43,7 +43,7 @@ namespace AreaRoomsAPI
 
         public GeneratedArea GenerateArea()
         {
-            var chromosome = new AreaChromosome(areaInfo, formatsInfo[RoomType.Corridor].RecWidth / 2, areaInfo.RoomTypes.Count);
+            var chromosome = new AreaChromosome(areaInfo, formatsInfo[RoomType.Corridor].RecWidth, areaInfo.RoomTypes.Count);
             var fitness = new AreaFitness(formatsInfo, areaInfo.RoomTypes, roomsPriority, chromosome.cellsCountWidth, chromosome.cellsCountHeight);
             var population = new TplPopulation(80, 120, chromosome);
             var selection = new AreaTournamentSelection(15);

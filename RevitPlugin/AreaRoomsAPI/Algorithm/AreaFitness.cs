@@ -104,6 +104,7 @@ namespace AreaRoomsAPI.Algorithm
                 var gene = roomGenes[i];
                 var roomFormat = formats[priority[i]];
                 fitness += CalculateFitnessOfRoom(gene, roomFormat, formats.Ratio);
+
             }
 
             areaChromosome.Fitness = fitness;
@@ -124,6 +125,11 @@ namespace AreaRoomsAPI.Algorithm
                 fitness -= 500 + Math.Pow(format.MinWidth - minWidth, 2);
             else if (minWidth > format.MaxWidth)
                 fitness -= 500 + Math.Pow(minWidth-format.MaxWidth, 2);
+
+            if (roomRatio > ratio)
+            {
+                fitness -= 200 * (roomRatio - ratio); 
+            }
 
             if (square < format.MinSquare)
                 fitness -= 500 + format.MinSquare - square;
