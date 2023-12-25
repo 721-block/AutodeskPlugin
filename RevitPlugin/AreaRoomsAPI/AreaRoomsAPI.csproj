@@ -64,9 +64,14 @@
   <ItemGroup>
     <Compile Include="Algorithm\AreaChromosome.cs" />
     <Compile Include="Algorithm\AreaFitness.cs" />
+    <Compile Include="Algorithm\AreaReinsertion.cs" />
+    <Compile Include="Algorithm\AreaTournamentSelection.cs" />
     <Compile Include="Algorithm\RoomGene.cs" />
     <Compile Include="Geometric\Direction.cs" />
     <Compile Include="Geometric\Point.cs" />
+    <Compile Include="Info\BalconyWall.cs" />
+    <Compile Include="Info\EnterWall.cs" />
+    <Compile Include="Info\StandartWall.cs" />
     <Compile Include="Side.cs" />
     <Compile Include="Info\AreaInfo.cs" />
     <Compile Include="Info\AreaType.cs" />

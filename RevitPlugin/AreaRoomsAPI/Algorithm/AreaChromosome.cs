@@ -20,17 +20,17 @@ namespace AreaRoomsAPI.Algorithm
         private readonly double cellSize;
         public readonly double Width;
         public readonly double Height;
-        private readonly double minCellSize;
+        private readonly double corridorSize;
         private readonly AreaInfo areaInfo;
         private readonly Point[] startPoints;
         private List<Point>[] roomsPoints;
 
-        public AreaChromosome(AreaInfo areaInfo, double minCellSize, int roomsCount) : base(roomsCount)
+        public AreaChromosome(AreaInfo areaInfo, double corridorSize, int roomsCount) : base(roomsCount)
         {
             this.areaInfo = areaInfo;
             Width = areaInfo.Width;
             Height = areaInfo.Height;
-            this.minCellSize = minCellSize;
+            this.corridorSize = corridorSize;
             startPoints = new Point[roomsCount];
             roomsPoints = new List<Point>[roomsCount];
             for (int i = 0; i < roomsCount; i++)
@@ -39,12 +39,7 @@ namespace AreaRoomsAPI.Algorithm
             }
 
             var nod = FindNOD(Width, Height);
-            while (nod / 2 > minCellSize)
-            {
-                nod /= 2;
-            }
-
-            cellSize = nod;
+            cellSize = FindNOD(corridorSize, nod);
             cellsCountWidth = (int)(Width / cellSize);
             cellsCountHeight = (int)(Height / cellSize);
 
@@ -79,7 +74,7 @@ namespace AreaRoomsAPI.Algorithm
 
         public override IChromosome CreateNew()
         {
-            return new AreaChromosome(areaInfo, minCellSize, Length);
+            return new AreaChromosome(areaInfo, corridorSize, Length);
         }
 
         public override Gene GenerateGene(int geneIndex)
