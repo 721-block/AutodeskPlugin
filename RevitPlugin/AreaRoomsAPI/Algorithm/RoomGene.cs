@@ -1,10 +1,6 @@
 ﻿using AreaRoomsAPI.Geometric;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AreaRoomsAPI.Algorithm
 {
@@ -22,8 +18,8 @@ namespace AreaRoomsAPI.Algorithm
 
         private double cellSize;
 
-        public RoomGene(Point point, double cellSize) 
-        { 
+        public RoomGene(Point point, double cellSize)
+        {
             Point = point;
             minXCell = point.X;
             minYCell = point.Y;
@@ -69,7 +65,7 @@ namespace AreaRoomsAPI.Algorithm
             maxYCell = Point.Y;
         }
 
-        public static bool operator==(RoomGene left, RoomGene right)
+        public static bool operator ==(RoomGene left, RoomGene right)
         {
             return left.Point == right.Point;
         }

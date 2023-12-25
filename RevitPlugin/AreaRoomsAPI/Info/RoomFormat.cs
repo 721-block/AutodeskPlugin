@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AreaRoomsAPI.Info
+﻿namespace AreaRoomsAPI.Info
 {
     public struct RoomFormat
     {
@@ -14,7 +8,8 @@ namespace AreaRoomsAPI.Info
         public readonly double MaxSquare;
         public readonly double RecWidth;
 
-        public RoomFormat(double minWidth = 0, double maxWidth = double.MaxValue, double recWidth = -1, double minSquare = 0, double maxSquare = double.MaxValue)
+        public RoomFormat(double minWidth = 0, double maxWidth = double.MaxValue, double recWidth = -1,
+            double minSquare = 0, double maxSquare = double.MaxValue)
         {
             MinWidth = minWidth;
             MaxWidth = maxWidth;
@@ -23,14 +18,14 @@ namespace AreaRoomsAPI.Info
             RecWidth = recWidth;
         }
 
-        public static RoomFormat operator*(RoomFormat roomFormat, double number)
+        public static RoomFormat operator *(RoomFormat roomFormat, double number)
         {
             return new RoomFormat(roomFormat.MinWidth * number,
                 roomFormat.MaxWidth * number,
                 roomFormat.RecWidth * number,
                 roomFormat.MinSquare * number,
                 roomFormat.MaxSquare * number
-                );
+            );
         }
     }
 }
