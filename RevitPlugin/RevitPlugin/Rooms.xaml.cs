@@ -12,19 +12,24 @@ namespace RevitPlugin
         private Curve balconyWall;
         private Curve entranceWall;
         private List<Curve> walls;
+        private readonly List<RoomType> rooms;
+        private readonly AreaRoomsFormatsInfo roomsFormats;
         private XYZ leftTopPoint;
-        private GeneratedArea rooms;
+        private GeneratedArea generatedRooms;
         private readonly Document document;
 
-        public Rooms(GeometryObject balconyWall, GeometryObject entranceWall, CurveLoop walls, Document document)
+        public Rooms(GeometryObject balconyWall, GeometryObject entranceWall, CurveLoop walls,
+            Document document, List<RoomType> rooms, AreaRoomsFormatsInfo roomsFormats)
         {
             InitializeComponent();
             this.balconyWall = balconyWall as Curve;
             this.entranceWall = entranceWall as Curve;
             this.walls = TransformData.ParseCurveIterator(walls.GetCurveLoopIterator());
             this.document = document;
+            this.rooms = rooms;
+            this.roomsFormats = roomsFormats;
             leftTopPoint = GetLeftAndRightPoints(this.walls).Item1;
-            rooms = GenerateRooms();
+            generatedRooms = GenerateRooms();
             DrawLines();
             CreateAppartment();
         }
@@ -34,10 +39,11 @@ namespace RevitPlugin
 
             var areaInfo = new AreaInfo(
                 TransformData.TransformAutodeskWallsToApi(balconyWall, entranceWall, walls),
-                0.0, new List<RoomType> { RoomType.Corridor, RoomType.Kitchen, RoomType.Bathroom, RoomType.Default }
+                0.0, rooms,
+                0.0
                 );
 
-            var roomsGenerator = new RoomsGenerator(areaInfo, AreaRoomsFormatsInfo.GetAreaFormatsInfo(AreaType.Economy));
+            var roomsGenerator = new RoomsGenerator(areaInfo, roomsFormats);
 
             return roomsGenerator.GenerateArea();
         }
@@ -47,7 +53,7 @@ namespace RevitPlugin
             // stack to debug with different rooms colors
             var stack = new Stack<SolidColorBrush>(new List<SolidColorBrush>{Brushes.Black, Brushes.Blue, Brushes.Red, Brushes.Gold});
             
-            foreach (var pair in rooms.Rooms)
+            foreach (var pair in generatedRooms.Rooms)
             {
                 var stroke = stack.Pop();
                 for (var i = 0; i < pair.Item2.Count; i++)
@@ -73,7 +79,7 @@ namespace RevitPlugin
         public void CreateAppartment()
         {
             var curves = new List<List<Curve>>();
-            foreach (var pair in rooms.Rooms)
+            foreach (var pair in generatedRooms.Rooms)
             {
                 curves.Add(AutodeskAPICreator.GetCurvesByPoints(pair.Item2, document));
             }
@@ -104,6 +110,11 @@ namespace RevitPlugin
             }
 
             return (leftCurve.GetEndPoint(0), rightCurve.GetEndPoint(0));
+        }
+
+        private void CanvasPreview_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

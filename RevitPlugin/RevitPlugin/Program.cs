@@ -29,8 +29,8 @@ namespace RevitPlugin
             var entranceGeometry = entrance.GetGeometryObjectFromReference(entranceReference) as Edge;
             var entranceWall = entranceGeometry.AsCurve();
 
-            var roomsWindow = new Rooms(balconyWall, entranceWall, walls, document.Document);
-            roomsWindow.Show();
+            var parameters = new ApartmentParameters(balconyWall, entranceWall, walls, document.Document);
+            parameters.ShowDialog();
             return Result.Succeeded;
         }
     }
