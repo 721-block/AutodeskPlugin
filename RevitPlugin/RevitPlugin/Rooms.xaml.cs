@@ -17,11 +17,12 @@ namespace RevitPlugin
         private readonly List<RoomType> rooms;
         private readonly AreaRoomsFormatsInfo roomsFormats;
         private readonly XYZ leftTopPoint;
-        private readonly GeneratedArea generatedRooms;
+        private readonly IList<GeneratedArea> generatedRooms;
         private readonly Document document;
         private readonly List<Canvas> allCanvas;
         private readonly double appartmentWidth;
         private readonly double appartmentHeight;
+        private readonly int currentAppartment = 0;
 
         public Rooms(GeometryObject balconyWall, GeometryObject entranceWall, CurveLoop walls,
             Document document, List<RoomType> rooms, AreaRoomsFormatsInfo roomsFormats)
@@ -40,7 +41,7 @@ namespace RevitPlugin
             DrawAllCanvas();
         }
 
-        public GeneratedArea GenerateRooms()
+        public IList<GeneratedArea> GenerateRooms()
         {
 
             var areaInfo = new AreaInfo(
@@ -50,25 +51,29 @@ namespace RevitPlugin
 
             var roomsGenerator = new RoomsGenerator(areaInfo, roomsFormats);
 
-            return roomsGenerator.GenerateArea();
+            return roomsGenerator.GenerateAreas(6);
         }
 
         public void DrawAllCanvas()
         {
-            foreach (var canvas in allCanvas)
+            var mulitpier = GetMultipier(RoomCanvas, appartmentWidth, appartmentHeight);
+            var withDelta = GetDeltaCoordinates(mulitpier, RoomCanvas.Width, appartmentWidth);
+            var heightDelta = GetDeltaCoordinates(mulitpier, RoomCanvas.Height, appartmentHeight);
+            DrawAppartment(RoomCanvas, mulitpier, withDelta, heightDelta, 0);
+            for (var i = 0; i < allCanvas.Count; i++)
             {
-                var mulitpier = GetMultipier(canvas, appartmentWidth, appartmentHeight);
-                var withDelta = GetDeltaCoordinates(mulitpier, canvas.Width, appartmentWidth);
-                var heightDelta = GetDeltaCoordinates(mulitpier, canvas.Height, appartmentHeight);
-                DrawAppartment(canvas, mulitpier, withDelta, heightDelta);
+                mulitpier = GetMultipier(allCanvas[i], appartmentWidth, appartmentHeight);
+                withDelta = GetDeltaCoordinates(mulitpier, allCanvas[i].Width, appartmentWidth);
+                heightDelta = GetDeltaCoordinates(mulitpier, allCanvas[i].Height, appartmentHeight);
+                DrawAppartment(allCanvas[i], mulitpier, withDelta, heightDelta, i);
             }
         }
 
-        public void DrawAppartment(Canvas canvas, double multipier, double widthDelta, double heightDelta)
+        public void DrawAppartment(Canvas canvas, double multipier, double widthDelta, double heightDelta, int appartmentIndex)
         {
             //var stack = new Stack<SolidColorBrush>(new List<SolidColorBrush>{Brushes.Black, Brushes.Blue, Brushes.Red, Brushes.Gold});
             
-            foreach (var pair in generatedRooms.Rooms)
+            foreach (var pair in generatedRooms[appartmentIndex].Rooms)
             {
                 for (var i = 0; i < pair.Item2.Count; i++)
                 {
@@ -89,10 +94,10 @@ namespace RevitPlugin
             }
         }
 
-        public void CreateAppartment()
+        public void CreateAppartment(int appartmentIndex)
         {
             var curves = new List<List<Curve>>();
-            foreach (var pair in generatedRooms.Rooms)
+            foreach (var pair in generatedRooms[appartmentIndex].Rooms)
             {
                 curves.Add(AutodeskAPICreator.GetCurvesByPoints(pair.Item2, document));
             }
@@ -170,7 +175,7 @@ namespace RevitPlugin
 
         private List<Canvas> GetAllCanvs()
         {
-            return new List<Canvas> { RoomCanvas, FirstPreview, SecondPreview, ThirdPreview, FourthPreview, FifthPreview, SixthPreview};
+            return new List<Canvas> { FirstPreview, SecondPreview, ThirdPreview, FourthPreview, FifthPreview, SixthPreview};
         }
 
         private int GetCanvasIndex(Canvas currentCanvas)
@@ -185,12 +190,17 @@ namespace RevitPlugin
 
         private void CanvasPreview_Click(object sender, RoutedEventArgs e)
         {
-
+            var canvas = (Canvas)sender;
+            var currentIndex = GetCanvasIndex(canvas);
+            var mulitpier = GetMultipier(RoomCanvas, appartmentWidth, appartmentHeight);
+            var withDelta = GetDeltaCoordinates(mulitpier, RoomCanvas.Width, appartmentWidth);
+            var heightDelta = GetDeltaCoordinates(mulitpier, RoomCanvas.Height, appartmentHeight);
+            DrawAppartment(RoomCanvas, mulitpier, withDelta, heightDelta, currentIndex);
         }
 
         private void Generate_Appartment(object sender, RoutedEventArgs e)
         {
-            CreateAppartment();
+            CreateAppartment(currentAppartment);
         }
     }
 }
