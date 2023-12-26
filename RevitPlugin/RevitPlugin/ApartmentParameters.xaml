@@ -95,6 +95,7 @@
                     <RadioButton FontSize="18" 
                                  Foreground="White"
                                  Margin="0 0 10 0"
+                                 IsChecked="True"
                                  x:Name="FirstWidthBath"
                                  HorizontalContentAlignment="Center"
                                  VerticalContentAlignment="Center">

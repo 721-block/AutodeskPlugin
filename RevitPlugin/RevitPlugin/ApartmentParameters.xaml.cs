@@ -142,7 +142,7 @@ namespace RevitPlugin
             var rooms = GetRoomTypesByRoomsCount(int.Parse(RoomsCount.Text), false, false, false);
             var roomFormats = GetAreaRoomFormatsInfo();
             var roomsWindow = new Rooms(balconyWall, entranceWall, walls, document, rooms, roomFormats);
-            roomsWindow.Show();
+            roomsWindow.ShowDialog();
             Close();
         }
     }

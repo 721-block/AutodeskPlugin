@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:RevitPlugin"
              mc:Ignorable="d" 
              Background="#91B6E5"
-             d:DesignHeight="606" d:DesignWidth="950">
+             d:DesignHeight="650" d:DesignWidth="950">
     <Grid>
         <StackPanel Orientation="Horizontal" Margin="0"
                     VerticalAlignment="Top"
