@@ -4,12 +4,7 @@ using GeneticSharp.Domain.Chromosomes;
 using GeneticSharp.Domain.Fitnesses;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AreaRoomsAPI.Algorithm
 {
@@ -20,18 +15,18 @@ namespace AreaRoomsAPI.Algorithm
         private readonly Direction[] directions = Enum.GetValues(typeof(Direction)).Cast<Direction>().ToArray();
         private readonly int cellWidthCount;
         private readonly int cellHeightCount;
+
         public AreaFitness(
-            AreaRoomsFormatsInfo formats, 
-            IList<RoomType> roomTypes, 
-            Dictionary<RoomType, int> roomPriority, 
-            int cellWidthCount, 
-            int cellHeightCount) 
+            AreaRoomsFormatsInfo formats,
+            IList<RoomType> roomTypes,
+            Dictionary<RoomType, int> roomPriority,
+            int cellWidthCount,
+            int cellHeightCount)
         {
             this.formats = formats;
             priority = roomTypes.OrderByDescending(x => roomPriority[x]).ToArray();
             this.cellWidthCount = cellWidthCount;
             this.cellHeightCount = cellHeightCount;
-
         }
 
         public double Evaluate(IChromosome chromosome)
@@ -52,13 +47,13 @@ namespace AreaRoomsAPI.Algorithm
                 queue.Enqueue(i);
                 hashSet[roomGene.Point.Y, roomGene.Point.X] = true;
             }
-            
+
 
             while (queue.Count > 0)
             {
                 var geneIndex = queue.Dequeue();
                 var gene = roomGenes[geneIndex];
-                (var width, var height) = (gene.CellsWidth,  gene.CellsHeight);
+                (var width, var height) = (gene.CellsWidth, gene.CellsHeight);
 
                 foreach (var side in directions.OrderBy(x => (int)x % 2 == 0 ? height : width).ThenBy(x => x))
                 {
@@ -81,7 +76,7 @@ namespace AreaRoomsAPI.Algorithm
                         queue.Enqueue(geneIndex);
                         break;
                     }
-                }           
+                }
             }
 
             for (var i = 0; i < roomGenes.Length; i++)
@@ -104,7 +99,6 @@ namespace AreaRoomsAPI.Algorithm
                 var gene = roomGenes[i];
                 var roomFormat = formats[priority[i]];
                 fitness += CalculateFitnessOfRoom(gene, roomFormat, formats.Ratio);
-
             }
 
             areaChromosome.Fitness = fitness;
@@ -124,11 +118,11 @@ namespace AreaRoomsAPI.Algorithm
             else if (minWidth < format.MinWidth)
                 fitness -= 500 + Math.Pow(format.MinWidth - minWidth, 2);
             else if (minWidth > format.MaxWidth)
-                fitness -= 500 + Math.Pow(minWidth-format.MaxWidth, 2);
+                fitness -= 500 + Math.Pow(minWidth - format.MaxWidth, 2);
 
             if (roomRatio > ratio)
             {
-                fitness -= 200 * (roomRatio - ratio); 
+                fitness -= 200 * (roomRatio - ratio);
             }
 
             if (square < format.MinSquare)

@@ -4,23 +4,23 @@ using GeneticSharp.Domain.Reinsertions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AreaRoomsAPI.Algorithm
 {
     public class AreaReinsertion : ReinsertionBase
     {
         public AreaReinsertion()
-        : base(canCollapse: false, canExpand: true)
+            : base(canCollapse: false, canExpand: true)
         {
         }
 
-        protected override IList<IChromosome> PerformSelectChromosomes(IPopulation population, IList<IChromosome> offspring, IList<IChromosome> parents)
+        protected override IList<IChromosome> PerformSelectChromosomes(IPopulation population,
+            IList<IChromosome> offspring, IList<IChromosome> parents)
         {
             var parentsCount = Math.Min(parents.Count, population.MinSize - offspring.Count);
             var chromosome = parents[0];
-            var newChromosomesCount = Math.Max(population.MinSize - offspring.Count, population.MaxSize - population.MinSize);
+            var newChromosomesCount =
+                Math.Max(population.MinSize - offspring.Count, population.MaxSize - population.MinSize);
             if (parentsCount > 0)
             {
                 var list = parents.OrderByDescending(p => p.Fitness).Take(newChromosomesCount).ToList();

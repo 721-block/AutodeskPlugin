@@ -3,11 +3,8 @@ using GeneticSharp.Domain.Populations;
 using GeneticSharp.Domain.Randomizations;
 using GeneticSharp.Domain.Selections;
 using GeneticSharp.Infrastructure.Framework.Texts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AreaRoomsAPI.Algorithm
 {
@@ -30,7 +27,9 @@ namespace AreaRoomsAPI.Algorithm
 
             if (Size > generation.Chromosomes.Count)
             {
-                throw new SelectionException(this, "The tournament size is greater than available chromosomes. Tournament size is {0} and generation {1} available chromosomes are {2}.".With(Size, generation.Number, generation.Chromosomes.Count));
+                throw new SelectionException(this,
+                    "The tournament size is greater than available chromosomes. Tournament size is {0} and generation {1} available chromosomes are {2}."
+                        .With(Size, generation.Number, generation.Chromosomes.Count));
             }
 
             List<IChromosome> list = generation.Chromosomes.ToList();

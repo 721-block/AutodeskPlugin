@@ -2,14 +2,11 @@
 using AreaRoomsAPI.Info;
 using GeneticSharp.Domain;
 using GeneticSharp.Domain.Populations;
-using GeneticSharp.Domain.Selections;
 using GeneticSharp.Domain.Crossovers;
 using GeneticSharp.Domain.Mutations;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using GeneticSharp.Domain.Terminations;
-using System.Runtime.Remoting.Channels;
 using GeneticSharp.Infrastructure.Framework.Threading;
 
 namespace AreaRoomsAPI
@@ -18,13 +15,13 @@ namespace AreaRoomsAPI
     {
         private readonly Dictionary<RoomType, int> roomsPriority = new Dictionary<RoomType, int>()
         {
-            {RoomType.Kitchen, 3 },
-            {RoomType.Default, 3 },
-            {RoomType.Wardrobe, 1 },
-            {RoomType.Toilet, 1 },
-            {RoomType.Bathroom, 2 },
-            {RoomType.Loggia, 2 },
-            {RoomType.Corridor, 2 },
+            { RoomType.Kitchen, 3 },
+            { RoomType.Default, 3 },
+            { RoomType.Wardrobe, 1 },
+            { RoomType.Toilet, 1 },
+            { RoomType.Bathroom, 2 },
+            { RoomType.Loggia, 2 },
+            { RoomType.Corridor, 2 },
         };
 
 
@@ -43,8 +40,10 @@ namespace AreaRoomsAPI
 
         public GeneratedArea GenerateArea()
         {
-            var chromosome = new AreaChromosome(areaInfo, formatsInfo[RoomType.Corridor].RecWidth, areaInfo.RoomTypes.Count);
-            var fitness = new AreaFitness(formatsInfo, areaInfo.RoomTypes, roomsPriority, chromosome.cellsCountWidth, chromosome.cellsCountHeight);
+            var chromosome = new AreaChromosome(areaInfo, formatsInfo[RoomType.Corridor].RecWidth,
+                areaInfo.RoomTypes.Count);
+            var fitness = new AreaFitness(formatsInfo, areaInfo.RoomTypes, roomsPriority, chromosome.cellsCountWidth,
+                chromosome.cellsCountHeight);
             var population = new TplPopulation(80, 120, chromosome);
             var selection = new AreaTournamentSelection(15);
             var crossover = new OrderedCrossover();
@@ -62,20 +61,19 @@ namespace AreaRoomsAPI
             {
                 if (ga.GenerationsNumber == 175)
                 {
-
                 }
             };
 
             ga.Start();
 
-            
 
             var bestChromosome = (AreaChromosome)ga.BestChromosome;
             var genes = bestChromosome.GetGenes().Select(x => (RoomGene)x.Value).ToArray();
 
             var basePoint = areaInfo.Points.OrderBy(p => p.X).ThenBy(p => p.Y).First();
-            
-            var ans = bestChromosome.GetRoomsBorders().Select(x => bestChromosome.ConvertPointListToPointDList(x, basePoint)).ToList();
+
+            var ans = bestChromosome.GetRoomsBorders()
+                .Select(x => bestChromosome.ConvertPointListToPointDList(x, basePoint)).ToList();
 
             var list = ans.Select(x => (RoomType.Default, x)).ToList();
 

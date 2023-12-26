@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using AreaRoomsAPI.Geometric;
 using AreaRoomsAPI.Info;
 using GeneticSharp.Domain.Chromosomes;
 using GeneticSharp.Domain.Randomizations;
-using NUnit.Framework.Constraints;
 
 namespace AreaRoomsAPI.Algorithm
 {
@@ -80,12 +75,12 @@ namespace AreaRoomsAPI.Algorithm
         public override Gene GenerateGene(int geneIndex)
         {
             return new Gene(new RoomGene(
-                    new Point
-                    (
-                        RandomizationProvider.Current.GetInt(0, cellsCountWidth),
-                        RandomizationProvider.Current.GetInt(0, cellsCountHeight)
-                    ), 
-                    cellSize));
+                new Point
+                (
+                    RandomizationProvider.Current.GetInt(0, cellsCountWidth),
+                    RandomizationProvider.Current.GetInt(0, cellsCountHeight)
+                ),
+                cellSize));
         }
 
         public override IChromosome Clone()
@@ -132,8 +127,10 @@ namespace AreaRoomsAPI.Algorithm
                 {
                     ans.Add(point.Y, new List<Point>());
                 }
+
                 ans[point.Y].Add(point);
             }
+
             var fullAns = new SortedDictionary<int, IList<Point>>();
             var prevPair = (new Point(0, 0), new Point(0, 0));
             var flag = true;
@@ -145,18 +142,22 @@ namespace AreaRoomsAPI.Algorithm
                 if (flag)
                 {
                     flag = false;
-                    prevPair = (new Point(ans[key].OrderBy(p => p.X).First()), new Point(ans[key].OrderBy(p => p.X).Last()));
+                    prevPair = (new Point(ans[key].OrderBy(p => p.X).First()),
+                        new Point(ans[key].OrderBy(p => p.X).Last()));
                     left.Add(new PointD(prevPair.Item1.X * cellSize, prevPair.Item1.Y * cellSize));
                     right.Add(new PointD(prevPair.Item2.X * cellSize + cellSize, prevPair.Item2.Y * cellSize));
                     continue;
                 }
-                var currentPair = (new Point(ans[key].OrderBy(p => p.X).First()), new Point(ans[key].OrderByDescending(p => p.X).First()));
+
+                var currentPair = (new Point(ans[key].OrderBy(p => p.X).First()),
+                    new Point(ans[key].OrderByDescending(p => p.X).First()));
                 if (currentPair.Item1.X != prevPair.Item1.X)
                 {
                     left.Add(new PointD(prevPair.Item1.X * cellSize, currentPair.Item1.Y * cellSize));
                     left.Add(new PointD(currentPair.Item1.X * cellSize, currentPair.Item1.Y * cellSize));
                     prevPair.Item1 = new Point(currentPair.Item1);
-                } else if (key == maxKey)
+                }
+                else if (key == maxKey)
                 {
                     left.Add(new PointD(currentPair.Item1.X * cellSize, currentPair.Item1.Y * cellSize + cellSize));
                 }
@@ -166,9 +167,11 @@ namespace AreaRoomsAPI.Algorithm
                     right.Add(new PointD(prevPair.Item2.X * cellSize + cellSize, currentPair.Item2.Y * cellSize));
                     right.Add(new PointD(currentPair.Item2.X * cellSize + cellSize, currentPair.Item2.Y * cellSize));
                     prevPair.Item2 = new Point(currentPair.Item2);
-                } else if (key == maxKey)
+                }
+                else if (key == maxKey)
                 {
-                    right.Add(new PointD(currentPair.Item2.X * cellSize + cellSize, currentPair.Item2.Y * cellSize + cellSize));
+                    right.Add(new PointD(currentPair.Item2.X * cellSize + cellSize,
+                        currentPair.Item2.Y * cellSize + cellSize));
                 }
             }
 
@@ -193,6 +196,7 @@ namespace AreaRoomsAPI.Algorithm
                     right.Add(prevPair.Item2);
                     continue;
                 }
+
                 var currentPair = (pointsLayers[key][0], pointsLayers[key][1]);
 
                 if (currentPair.Item1.X > prevPair.Item1.X)
@@ -229,6 +233,7 @@ namespace AreaRoomsAPI.Algorithm
                     right.Add(currentPair.Item2);
                 }
             }
+
             right.Reverse();
             return left.Concat(right).ToList();
         }
