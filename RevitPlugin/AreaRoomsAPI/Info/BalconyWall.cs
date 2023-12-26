@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AreaRoomsAPI.Info
 {
-    internal class BalconyWall : Wall
+    public class BalconyWall : Wall
     {
         public readonly (double start, double end)[] Windows;
 

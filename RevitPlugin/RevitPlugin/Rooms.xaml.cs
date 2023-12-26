@@ -9,13 +9,13 @@ namespace RevitPlugin
 {
     public partial class Rooms : Window
     {
-        private Curve balconyWall;
-        private Curve entranceWall;
-        private List<Curve> walls;
+        private readonly Curve balconyWall;
+        private readonly Curve entranceWall;
+        private readonly List<Curve> walls;
         private readonly List<RoomType> rooms;
         private readonly AreaRoomsFormatsInfo roomsFormats;
-        private XYZ leftTopPoint;
-        private GeneratedArea generatedRooms;
+        private readonly XYZ leftTopPoint;
+        private readonly GeneratedArea generatedRooms;
         private readonly Document document;
 
         public Rooms(GeometryObject balconyWall, GeometryObject entranceWall, CurveLoop walls,
@@ -31,16 +31,14 @@ namespace RevitPlugin
             leftTopPoint = GetLeftAndRightPoints(this.walls).Item1;
             generatedRooms = GenerateRooms();
             DrawLines();
-            CreateAppartment();
         }
 
         public GeneratedArea GenerateRooms()
         {
 
             var areaInfo = new AreaInfo(
-                TransformData.TransformAutodeskWallsToApi(balconyWall, entranceWall, walls),
-                0.0, rooms,
-                0.0
+                TransformData.TransformAutodeskWallsToApi(balconyWall, entranceWall, walls, new XYZ(), new XYZ()),
+                0.0, rooms
                 );
 
             var roomsGenerator = new RoomsGenerator(areaInfo, roomsFormats);
@@ -63,10 +61,10 @@ namespace RevitPlugin
 
                     var line = new System.Windows.Shapes.Line
                     {
-                        X1 = (startPoint.X - leftTopPoint.X) * 25,
-                        Y1 = (startPoint.Y - leftTopPoint.Y) * 25,
-                        X2 = (endPoint.X - leftTopPoint.X) * 25,
-                        Y2 = (endPoint.Y - leftTopPoint.Y) * 25,
+                        X1 = (startPoint.X - leftTopPoint.X) * 10,
+                        Y1 = (startPoint.Y - leftTopPoint.Y) * 10,
+                        X2 = (endPoint.X - leftTopPoint.X) * 10,
+                        Y2 = (endPoint.Y - leftTopPoint.Y) * 10,
                         //Stroke = Brushes.Black,
                         Stroke = stroke
                     };
@@ -115,6 +113,11 @@ namespace RevitPlugin
         private void CanvasPreview_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Generate_Appartment(object sender, RoutedEventArgs e)
+        {
+            CreateAppartment();
         }
     }
 }

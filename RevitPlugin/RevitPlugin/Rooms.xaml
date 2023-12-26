@@ -27,7 +27,8 @@
                         VerticalAlignment="Top"
                         Margin="30 0 0 0"
                         BorderThickness="2"
-                        Foreground="Black">
+                        Foreground="Black"
+                        ButtonBase.Click="Generate_Appartment">
                     Сгенерировать выбранную комнату
                 </Button>
             </StackPanel>
