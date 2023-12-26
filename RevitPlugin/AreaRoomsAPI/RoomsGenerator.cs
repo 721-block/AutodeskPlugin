@@ -38,8 +38,10 @@ namespace AreaRoomsAPI
             this.formatsInfo = formatsInfo;
         }
 
-        public GeneratedArea GenerateArea()
+        public List<GeneratedArea> GenerateAreas(int areasCount)
         {
+            var result = new List<GeneratedArea>();
+
             var chromosome = new AreaChromosome(areaInfo, formatsInfo[RoomType.Corridor].RecWidth,
                 areaInfo.RoomTypes.Count);
             var fitness = new AreaFitness(formatsInfo, areaInfo.RoomTypes, roomsPriority, chromosome.cellsCountWidth,
@@ -66,18 +68,22 @@ namespace AreaRoomsAPI
 
             ga.Start();
 
+            for (int i = 0; i < areasCount; i++)
+            {
+                var chromosomes = ga.Population.CurrentGeneration.Chromosomes;
+                var currentChromosome = (AreaChromosome)chromosomes[i];
+                var genes = currentChromosome.GetGenes().Select(x => (RoomGene)x.Value).ToArray();
 
-            var bestChromosome = (AreaChromosome)ga.BestChromosome;
-            var genes = bestChromosome.GetGenes().Select(x => (RoomGene)x.Value).ToArray();
+                var basePoint = areaInfo.Points.OrderBy(p => p.X).ThenBy(p => p.Y).First();
 
-            var basePoint = areaInfo.Points.OrderBy(p => p.X).ThenBy(p => p.Y).First();
+                var ans = currentChromosome.GetRoomsBorders()
+                    .Select(x => currentChromosome.ConvertPointListToPointDList(x, basePoint)).ToList();
 
-            var ans = bestChromosome.GetRoomsBorders()
-                .Select(x => bestChromosome.ConvertPointListToPointDList(x, basePoint)).ToList();
+                var list = ans.Select(x => (RoomType.Default, x)).ToList();
+                result.Add(new GeneratedArea(list));
+            }
 
-            var list = ans.Select(x => (RoomType.Default, x)).ToList();
-
-            return new GeneratedArea(list);
+            return result;
         }
     }
 }

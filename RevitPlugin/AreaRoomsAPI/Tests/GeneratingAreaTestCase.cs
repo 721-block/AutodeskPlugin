@@ -32,7 +32,7 @@ namespace AreaRoomsAPI.Tests
 
             var roomGenerator = new RoomsGenerator(areaInfo, AreaRoomsFormatsInfo.GetAreaFormatsInfo(AreaType.Economy));
 
-            var area = roomGenerator.GenerateArea();
+            var areas = roomGenerator.GenerateAreas(5);
         }
     }
 }
