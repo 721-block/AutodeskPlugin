@@ -22,7 +22,7 @@ namespace RevitPlugin
         private readonly List<Canvas> allCanvas;
         private readonly double appartmentWidth;
         private readonly double appartmentHeight;
-        private readonly int currentAppartment = 0;
+        private int currentAppartment = 0;
 
         public Rooms(GeometryObject balconyWall, GeometryObject entranceWall, CurveLoop walls,
             Document document, List<RoomType> rooms, AreaRoomsFormatsInfo roomsFormats)
@@ -192,9 +192,11 @@ namespace RevitPlugin
         {
             var canvas = (Canvas)sender;
             var currentIndex = GetCanvasIndex(canvas);
+            currentAppartment = currentIndex;
             var mulitpier = GetMultipier(RoomCanvas, appartmentWidth, appartmentHeight);
             var withDelta = GetDeltaCoordinates(mulitpier, RoomCanvas.Width, appartmentWidth);
             var heightDelta = GetDeltaCoordinates(mulitpier, RoomCanvas.Height, appartmentHeight);
+            RoomCanvas.Children.Clear();
             DrawAppartment(RoomCanvas, mulitpier, withDelta, heightDelta, currentIndex);
         }
 

@@ -41,13 +41,13 @@
                         Width="160"
                         Height="170"
                         Margin="0 0 70 0"
-                        ButtonBase.Click="CanvasPreview_Click">
+                        MouseLeftButtonDown="CanvasPreview_Click">
                     </Canvas>
                     <Canvas x:Name="SecondPreview"
                         Background="#CBE1F5"
                         Width="160"
                         Height="170"
-                        ButtonBase.Click="CanvasPreview_Click">
+                        MouseLeftButtonDown="CanvasPreview_Click">
                     </Canvas>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
@@ -58,13 +58,13 @@
                             Width="160"
                             Height="170"
                             Margin="0 0 70 0"
-                            ButtonBase.Click="CanvasPreview_Click">
+                            MouseLeftButtonDown="CanvasPreview_Click">
                     </Canvas>
                     <Canvas x:Name="FourthPreview"
                         Background="#CBE1F5"
                             Width="160"
                             Height="170"
-                            ButtonBase.Click="CanvasPreview_Click">
+                            MouseLeftButtonDown="CanvasPreview_Click">
                     </Canvas>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
@@ -75,13 +75,13 @@
                             Width="160"
                             Height="170"
                             Margin="0 0 70 0"
-                            ButtonBase.Click="CanvasPreview_Click">
+                            MouseLeftButtonDown="CanvasPreview_Click">
                     </Canvas>
                     <Canvas x:Name="SixthPreview"
                             Background="#CBE1F5"
                             Width="160"
                             Height="170"
-                            ButtonBase.Click="CanvasPreview_Click">
+                            MouseLeftButtonDown="CanvasPreview_Click">
                     </Canvas>
                 </StackPanel>
             </StackPanel>
