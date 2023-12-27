@@ -19,7 +19,12 @@
                         Width="420"
                         Height="400"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Top"/>
+                        VerticalAlignment="Top">
+                    <Canvas.LayoutTransform>
+                        <ScaleTransform ScaleY="-1">
+                        </ScaleTransform>
+                    </Canvas.LayoutTransform>
+                </Canvas>
                 <Button Background="#CBE1F5"
                         Width="420"
                         Height="70"
@@ -42,12 +47,20 @@
                         Height="170"
                         Margin="0 0 70 0"
                         MouseLeftButtonDown="CanvasPreview_Click">
+                        <Canvas.LayoutTransform>
+                            <ScaleTransform ScaleY="-1">
+                            </ScaleTransform>
+                        </Canvas.LayoutTransform>
                     </Canvas>
                     <Canvas x:Name="SecondPreview"
                         Background="#CBE1F5"
                         Width="160"
                         Height="170"
                         MouseLeftButtonDown="CanvasPreview_Click">
+                        <Canvas.LayoutTransform>
+                            <ScaleTransform ScaleY="-1">
+                            </ScaleTransform>
+                        </Canvas.LayoutTransform>
                     </Canvas>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
@@ -59,12 +72,20 @@
                             Height="170"
                             Margin="0 0 70 0"
                             MouseLeftButtonDown="CanvasPreview_Click">
+                        <Canvas.LayoutTransform>
+                            <ScaleTransform ScaleY="-1">
+                            </ScaleTransform>
+                        </Canvas.LayoutTransform>
                     </Canvas>
                     <Canvas x:Name="FourthPreview"
                         Background="#CBE1F5"
                             Width="160"
                             Height="170"
                             MouseLeftButtonDown="CanvasPreview_Click">
+                        <Canvas.LayoutTransform>
+                            <ScaleTransform ScaleY="-1">
+                            </ScaleTransform>
+                        </Canvas.LayoutTransform>
                     </Canvas>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
@@ -76,12 +97,20 @@
                             Height="170"
                             Margin="0 0 70 0"
                             MouseLeftButtonDown="CanvasPreview_Click">
+                        <Canvas.LayoutTransform>
+                            <ScaleTransform ScaleY="-1">
+                            </ScaleTransform>
+                        </Canvas.LayoutTransform>
                     </Canvas>
                     <Canvas x:Name="SixthPreview"
                             Background="#CBE1F5"
                             Width="160"
                             Height="170"
                             MouseLeftButtonDown="CanvasPreview_Click">
+                        <Canvas.LayoutTransform>
+                            <ScaleTransform ScaleY="-1">
+                            </ScaleTransform>
+                        </Canvas.LayoutTransform>
                     </Canvas>
                 </StackPanel>
             </StackPanel>
