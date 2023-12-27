@@ -1,4 +1,5 @@
-﻿using AreaRoomsAPI.Algorithm;
+﻿using System;
+using AreaRoomsAPI.Algorithm;
 using AreaRoomsAPI.Info;
 using GeneticSharp.Domain;
 using GeneticSharp.Domain.Populations;
@@ -68,10 +69,14 @@ namespace AreaRoomsAPI
 
             ga.Start();
 
-            for (int i = 0; i < areasCount; i++)
+            var topDistinctChromosomes = ga.Population.CurrentGeneration.Chromosomes
+                .GroupBy(chr => chr.Fitness)
+                .Select(g => (AreaChromosome)(g.First()))
+                .Take(areasCount)
+                .ToList();
+            
+            foreach (var currentChromosome in topDistinctChromosomes)
             {
-                var chromosomes = ga.Population.CurrentGeneration.Chromosomes;
-                var currentChromosome = (AreaChromosome)chromosomes[i];
                 var genes = currentChromosome.GetGenes().Select(x => (RoomGene)x.Value).ToArray();
 
                 var basePoint = areaInfo.Points.OrderBy(p => p.X).ThenBy(p => p.Y).First();
@@ -83,6 +88,7 @@ namespace AreaRoomsAPI
                 result.Add(new GeneratedArea(list));
             }
 
+            
             return result;
         }
     }

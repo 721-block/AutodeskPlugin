@@ -134,3 +134,6 @@ _NCrunch*
 
 # Visual Studio generated files
 .vs/
+
+# Rider generatied files
+.idea/
