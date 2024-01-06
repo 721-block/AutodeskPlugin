@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using System;
 
 namespace RevitPlugin
 {
@@ -8,6 +9,8 @@ namespace RevitPlugin
     [Regeneration(RegenerationOption.Manual)]
     public class Program : IExternalCommand
     {
+        static AddInId addinId = new AddInId(new Guid("0330CEFC-2D00-4679-8575-415900518532"));
+        
         public Result Execute(ExternalCommandData externalCommandData, ref string message, ElementSet elements)
         {
             var document = externalCommandData.Application.ActiveUIDocument;

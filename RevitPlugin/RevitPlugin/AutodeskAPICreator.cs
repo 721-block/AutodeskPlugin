@@ -41,20 +41,22 @@ namespace RevitPlugin
 
                     var room = GeometryCreationUtilities
                         .CreateExtrusionGeometry(
-                        new CurveLoop[] { loop },
-                        XYZ.BasisZ, height, options);
+                            new CurveLoop[] { loop },
+                            XYZ.BasisZ, height, options);
 
                     shape.SetShape(new List<GeometryObject> { room });
                     shape.SetName($"Room");
                     assemblyElements.Add(shape.Id);
                 }
+
                 transaction.Commit();
             }
 
             CreateAssembly(document, assemblyElements, assemblyElementsId);
         }
 
-        public static void CreateAssembly(Document document, List<ElementId> assemblyElements, ElementId assemblyElementsId)
+        public static void CreateAssembly(Document document, List<ElementId> assemblyElements,
+            ElementId assemblyElementsId)
         {
             using (var transaction = new Transaction(document, "Create Assembly"))
             {

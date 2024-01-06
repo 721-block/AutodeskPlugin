@@ -43,11 +43,10 @@ namespace RevitPlugin
 
         public IList<GeneratedArea> GenerateRooms()
         {
-
             var areaInfo = new AreaInfo(
                 TransformData.TransformAutodeskWallsToApi(balconyWall, entranceWall, walls, new XYZ(), new XYZ()),
                 0.0, rooms
-                );
+            );
 
             var roomsGenerator = new RoomsGenerator(areaInfo, roomsFormats);
 
@@ -69,10 +68,9 @@ namespace RevitPlugin
             }
         }
 
-        public void DrawAppartment(Canvas canvas, double multipier, double widthDelta, double heightDelta, int appartmentIndex)
+        public void DrawAppartment(Canvas canvas, double multipier, double widthDelta, double heightDelta,
+            int appartmentIndex)
         {
-            //var stack = new Stack<SolidColorBrush>(new List<SolidColorBrush>{Brushes.Black, Brushes.Blue, Brushes.Red, Brushes.Gold});
-            
             foreach (var pair in generatedRooms[appartmentIndex].Rooms)
             {
                 for (var i = 0; i < pair.Item2.Count; i++)
@@ -137,22 +135,25 @@ namespace RevitPlugin
             {
                 var startPoint = curve.GetEndPoint(0);
                 var endPoint = curve.GetEndPoint(1);
-                if (startPoint.X == endPoint.X && (IsXYZEquals(startPoint, leftTopPoint) || IsXYZEquals(endPoint, leftTopPoint)))
+                if (startPoint.X == endPoint.X &&
+                    (IsXYZEquals(startPoint, leftTopPoint) || IsXYZEquals(endPoint, leftTopPoint)))
                 {
                     widthAndHeight.Item2 = curve.ApproximateLength;
                 }
-                else if (startPoint.Y == endPoint.Y && (IsXYZEquals(startPoint, leftTopPoint) || IsXYZEquals(endPoint, leftTopPoint)))
+                else if (startPoint.Y == endPoint.Y &&
+                         (IsXYZEquals(startPoint, leftTopPoint) || IsXYZEquals(endPoint, leftTopPoint)))
                 {
                     widthAndHeight.Item1 = curve.ApproximateLength;
                 }
             }
+
             return widthAndHeight;
         }
 
         private bool IsXYZEquals(XYZ first, XYZ second)
         {
             return first.X == second.X && first.Y == second.Y && first.Z == second.Z;
-        } 
+        }
 
         private double GetMultipier(Canvas canvas, double width, double height)
         {
@@ -162,8 +163,7 @@ namespace RevitPlugin
             do
             {
                 multipier += 0.5;
-            }
-            while (width * multipier < canvasWidth && height * multipier < canvasHeight);
+            } while (width * multipier < canvasWidth && height * multipier < canvasHeight);
 
             return multipier - 0.5;
         }
@@ -175,16 +175,18 @@ namespace RevitPlugin
 
         private List<Canvas> GetAllCanvs()
         {
-            return new List<Canvas> { FirstPreview, SecondPreview, ThirdPreview, FourthPreview, FifthPreview, SixthPreview};
+            return new List<Canvas>
+                { FirstPreview, SecondPreview, ThirdPreview, FourthPreview, FifthPreview, SixthPreview };
         }
 
         private int GetCanvasIndex(Canvas currentCanvas)
         {
-            for (var i = 0; i < allCanvas.Count; i++) 
+            for (var i = 0; i < allCanvas.Count; i++)
             {
                 if (allCanvas[i].Equals(currentCanvas))
                     return i;
             }
+
             throw new ArgumentException($"canvas with name {currentCanvas.Name} doesnt exist");
         }
 

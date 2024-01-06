@@ -1,0 +1,11 @@
+<RevitAddIns>
+	<AddIn Type="Command">
+		<Name>RevitPlugin</Name>
+		<Assembly>RevitPlugin/RevitPlugin.dll</Assembly>
+		<FullClassName>RevitPlugin.Program</FullClassName>
+		<AddInId>0330CEFC-2D00-4679-8575-415900518532</AddInId>
+		<Text>Generate Rooms</Text>
+		<VendorId>721BlockInc</VendorId>
+		<VendorDescription>721 Block Inc., https://github.com/721-block/</VendorDescription>
+	</AddIn>
+</RevitAddIns>

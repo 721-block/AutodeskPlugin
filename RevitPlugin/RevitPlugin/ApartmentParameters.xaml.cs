@@ -17,7 +17,8 @@ namespace RevitPlugin
         private CurveLoop walls;
         private readonly Document document;
 
-        public ApartmentParameters(GeometryObject balconyWall, GeometryObject entranceWall, CurveLoop walls, Document document)
+        public ApartmentParameters(GeometryObject balconyWall, GeometryObject entranceWall, CurveLoop walls,
+            Document document)
         {
             InitializeComponent();
             this.document = document;
@@ -26,7 +27,8 @@ namespace RevitPlugin
             this.walls = walls;
         }
 
-        public List<RoomType> GetRoomTypesByRoomsCount(int roomCount, bool isSeparatedToilet, bool isHaveLoggia, bool isHaveWardrobe)
+        public List<RoomType> GetRoomTypesByRoomsCount(int roomCount, bool isSeparatedToilet, bool isHaveLoggia,
+            bool isHaveWardrobe)
         {
             var result = new List<RoomType>
             {
@@ -50,7 +52,7 @@ namespace RevitPlugin
         public AreaRoomsFormatsInfo GetAreaRoomFormatsInfo()
         {
             var formatsInfo = new Dictionary<RoomType, RoomFormat>();
-            
+
             var types = Enum.GetValues(typeof(RoomType));
 
             foreach (var type in types)
@@ -81,7 +83,8 @@ namespace RevitPlugin
                     textBoxes.Item2 = AreaRoom.Text;
                     break;
                 case RoomType.Bathroom:
-                    textBoxes.Item1 = GetDataFromRadioButtons(new List<RadioButton> { FirstWidthBath, SecondWidthBath, ThirdBathWidth });
+                    textBoxes.Item1 = GetDataFromRadioButtons(new List<RadioButton>
+                        { FirstWidthBath, SecondWidthBath, ThirdBathWidth });
                     textBoxes.Item2 = AreaBath.Text;
                     break;
                 case RoomType.Kitchen:
@@ -130,6 +133,7 @@ namespace RevitPlugin
                     result = (string)button.Content;
                 }
             }
+
             return result;
         }
 

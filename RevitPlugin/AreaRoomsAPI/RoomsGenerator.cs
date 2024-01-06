@@ -74,7 +74,7 @@ namespace AreaRoomsAPI
                 .Select(g => (AreaChromosome)(g.First()))
                 .Take(areasCount)
                 .ToList();
-            
+
             foreach (var currentChromosome in topDistinctChromosomes)
             {
                 var genes = currentChromosome.GetGenes().Select(x => (RoomGene)x.Value).ToArray();
@@ -88,7 +88,7 @@ namespace AreaRoomsAPI
                 result.Add(new GeneratedArea(list));
             }
 
-            
+
             return result;
         }
     }

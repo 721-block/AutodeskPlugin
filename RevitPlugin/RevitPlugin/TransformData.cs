@@ -7,8 +7,8 @@ namespace RevitPlugin
 {
     public static class TransformData
     {
-        public static IList<AreaRoomsAPI.Info.Wall> TransformAutodeskWallsToApi(Curve balconyWall, 
-            Curve entranceWall, 
+        public static IList<AreaRoomsAPI.Info.Wall> TransformAutodeskWallsToApi(Curve balconyWall,
+            Curve entranceWall,
             List<Curve> walls,
             XYZ doorPosition,
             XYZ balconyPosition)
@@ -27,7 +27,7 @@ namespace RevitPlugin
                 var endPoint = new PointD(wall.GetEndPoint(1).X, wall.GetEndPoint(1).Y);
 
                 if (startPoint == balconyStartPoint && endPoint == balconyEndPoint)
-                    result.Add(new AreaRoomsAPI.Info.BalconyWall(startPoint, endPoint, new (double, double)[] {}));
+                    result.Add(new AreaRoomsAPI.Info.BalconyWall(startPoint, endPoint, new (double, double)[] { }));
                 else if (startPoint == entranceStartPoint && endPoint == entranceEndPoint)
                     result.Add(new AreaRoomsAPI.Info.EnterWall(startPoint, endPoint, door));
                 else
